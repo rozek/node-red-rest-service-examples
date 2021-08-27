@@ -20,6 +20,16 @@ To test the examples, a [Postman collection](https://raw.githubusercontent.com/r
 
 Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
+### Memory-based Key-Value-Store ###
+
+![](examples/memory-based-key-value-store.png)
+
+### File-based Key-Value-Store ###
+
+![](examples/file-based-key-value-store.png)
+
+
+
 
 
 ## License ##
