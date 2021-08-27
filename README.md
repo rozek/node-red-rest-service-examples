@@ -24,9 +24,13 @@ Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
 ![](examples/memory-based-key-value-store.png)
 
+Currently, this service is accessible for everybody. But if you combine it with the closed web server from the [file-based web server](https://github.com/rozek/node-red-web-server-examples) examples, you may also easily create a *closed* Key-Value-Store.
+
 ### File-based Key-Value-Store ###
 
 ![](examples/file-based-key-value-store.png)
+
+Currently, this service is accessible for everybody. But if you combine it with the closed web server from the [file-based web server](https://github.com/rozek/node-red-web-server-examples) examples, you may also easily create a *closed* Key-Value-Store.
 
 
 
