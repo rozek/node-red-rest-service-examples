@@ -1,0 +1,16 @@
+{
+  "null":null,
+  "boolean":true,
+  "number":3.14159265,
+  "string":"Test",
+  "array":[ null, true, 3.14159265, "Test", [], {} ],
+  "object":{
+    "null":null,
+    "boolean":true,
+    "number":3.14159265,
+    "string":"Test",
+    "array":[],
+    "object":{}
+    }
+  }
+}
