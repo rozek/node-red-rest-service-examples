@@ -34,6 +34,7 @@ Currently, this service is accessible for everybody. But if you combine it with 
 
 ### File Management ###
 
+> For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance
 
 ### Dynamic Services ###
 
