@@ -32,8 +32,10 @@ Currently, this service is accessible for everybody. But if you combine it with 
 
 Currently, this service is accessible for everybody. But if you combine it with the closed web server from the [file-based web server](https://github.com/rozek/node-red-web-server-examples) examples, you may also easily create a *closed* Key-Value-Store.
 
+### File Management ###
 
 
+### Dynamic Services ###
 
 
 ## License ##
