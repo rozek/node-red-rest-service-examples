@@ -6,7 +6,7 @@ It is the continuation of my other examples of [HTTP(S) servers](https://github.
 
 For this series, it is assumed that the reader already installed Node-RED (as described in [Getting Started](https://nodered.org/docs/getting-started/)), optionally secured the editor (as shown in [Securing Node-RED](https://nodered.org/docs/user-guide/runtime/securing-node-red)) and started using it (as explained in [Creating your first flow](https://nodered.org/docs/tutorials/first-flow))
 
-> Please note: this work is currently in progress. While it may already be used, do not expect it to be finished before end of September 2021.
+> Please note: this work is currently in progress. While it may already be used, do not expect it to be finished before midth of October 2021.
 
 ### Required Extensions ###
 
