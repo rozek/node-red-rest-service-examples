@@ -24,6 +24,8 @@ To test the examples, a [Postman collection](https://raw.githubusercontent.com/r
 
 Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
+## Key-Value Stores ##
+
 ### Memory-based Key-Value-Store ###
 
 In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted:
@@ -42,11 +44,9 @@ The shown example reads from and writes to a file called `file-based-key-value-s
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-### File Management ###
+## File Management ##
 
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance
-
-### Dynamic Services ###
 
 
 ## License ##
