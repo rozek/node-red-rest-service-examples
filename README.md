@@ -38,6 +38,8 @@ If the amount of data to be kept in a key-value-store is known to be small (let'
 
 ![](examples/file-based-key-value-store.png)
 
+The shown example reads from and writes to a file called `file-based-key-value-store.json` found in the working directory of the running Node-RED instance - if you want to change it, just update the nodes labelled `read Store File` and `write Store File`.
+
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
 ### File Management ###
