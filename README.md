@@ -8,11 +8,13 @@ For this series, it is assumed that the reader already installed Node-RED (as de
 
 > Please note: this work is currently in progress. While it may already be used, do not expect it to be finished before midth of October 2021.
 
+> Just a small note: if you like this work and plan to use it, consider "starring" this repository (you will find the "Star" button on the top right of this page), so that I know which of my repositories to take most care of.
+
 ### Required Extensions ###
 
 For these examples to be run, it is necessary to install the following extension:
 
-* [node-red-contrib-components](https://github.com/ollixx/node-red-contrib-components)<br>"Components" allow multiply needed flows to be defined once and then invoked from multiple places
+* [node-red-contrib-reusable-flows](https://github.com/ollixx/node-red-contrib-reusable-flows)<br>"Reusable Flows" allow multiply needed flows to be defined once and then invoked from multiple places
 
 ## Examples ##
 
