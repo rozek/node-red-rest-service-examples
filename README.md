@@ -26,11 +26,15 @@ Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
 ### Memory-based Key-Value-Store ###
 
+In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted:
+
 ![](examples/memory-based-key-value-store.png)
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
 ### File-based Key-Value-Store ###
+
+If the amount of data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
 
 ![](examples/file-based-key-value-store.png)
 
