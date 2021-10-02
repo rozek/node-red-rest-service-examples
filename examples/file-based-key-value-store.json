@@ -1,0 +1,748 @@
+[
+    {
+        "id": "ab8fdb13de25f9b4",
+        "type": "comment",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "file-based key-value-store (at /file-based-key-value-store)",
+        "info": "",
+        "x": 890,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "9cbb93bf6f687756",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "list keys",
+        "url": "file-based-key-value-store/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 730,
+        "y": 220,
+        "wires": [
+            [
+                "a1043337dcb8e8ee"
+            ]
+        ]
+    },
+    {
+        "id": "1c4efc5a7854f1ea",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1180,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "887259d55e23e78d",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "get entry",
+        "url": "file-based-key-value-store/:key",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 740,
+        "y": 280,
+        "wires": [
+            [
+                "cb4c11162be70a15"
+            ]
+        ]
+    },
+    {
+        "id": "262a2f8cf288cfee",
+        "type": "inject",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "at Startup",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 770,
+        "y": 160,
+        "wires": [
+            [
+                "4a5d9b9eccb368af"
+            ]
+        ]
+    },
+    {
+        "id": "be87bcb9b542a1d5",
+        "type": "file in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "read Store File",
+        "filename": "file-based-key-value-store.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 1000,
+        "y": 580,
+        "wires": [
+            [
+                "e0d77b18a5204965"
+            ]
+        ]
+    },
+    {
+        "id": "e872baf3c27d4cef",
+        "type": "switch",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "ENOENT",
+        "property": "error.message",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "ENOENT",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 920,
+        "y": 700,
+        "wires": [
+            [
+                "8feaae52e5c3abb5"
+            ],
+            [
+                "32f4fc577122ee48"
+            ]
+        ]
+    },
+    {
+        "id": "e0d77b18a5204965",
+        "type": "json",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 770,
+        "y": 640,
+        "wires": [
+            [
+                "706977acedbdb687"
+            ]
+        ]
+    },
+    {
+        "id": "706977acedbdb687",
+        "type": "change",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "save in flow context",
+        "rules": [
+            {
+                "t": "set",
+                "p": "file-based-key-value-store",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 960,
+        "y": 640,
+        "wires": [
+            [
+                "bf0e5aac792269d8"
+            ]
+        ]
+    },
+    {
+        "id": "6c234a836c9c575e",
+        "type": "debug",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "Status",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'initialized'",
+        "statusType": "jsonata",
+        "x": 1170,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3ca3dea0592ab6ad",
+        "type": "catch",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "scope": [
+            "e0d77b18a5204965",
+            "be87bcb9b542a1d5"
+        ],
+        "uncaught": false,
+        "x": 770,
+        "y": 700,
+        "wires": [
+            [
+                "e872baf3c27d4cef"
+            ]
+        ]
+    },
+    {
+        "id": "9cfa3b8f9c6b9b1a",
+        "type": "debug",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'could not write store file'",
+        "statusType": "jsonata",
+        "x": 1170,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "8feaae52e5c3abb5",
+        "type": "change",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "create in flow context",
+        "rules": [
+            {
+                "t": "set",
+                "p": "file-based-key-value-store",
+                "pt": "flow",
+                "to": "{}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 860,
+        "y": 760,
+        "wires": [
+            [
+                "c76dc427ee262830"
+            ]
+        ]
+    },
+    {
+        "id": "7b7587392a17ae6d",
+        "type": "json",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 770,
+        "y": 880,
+        "wires": [
+            [
+                "44b55dc28b8fa719"
+            ]
+        ]
+    },
+    {
+        "id": "8ab9c7327620965d",
+        "type": "change",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "load from flow context",
+        "rules": [
+            {
+                "t": "set",
+                "p": "_payload",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "file-based-key-value-store",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 960,
+        "y": 820,
+        "wires": [
+            [
+                "7b7587392a17ae6d"
+            ]
+        ]
+    },
+    {
+        "id": "44b55dc28b8fa719",
+        "type": "file",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "write Store File",
+        "filename": "file-based-key-value-store.json",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 940,
+        "y": 880,
+        "wires": [
+            [
+                "e2d0b17916784425"
+            ]
+        ]
+    },
+    {
+        "id": "e2d0b17916784425",
+        "type": "change",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "restore payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "_payload",
+                "tot": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "_payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1140,
+        "y": 880,
+        "wires": [
+            [
+                "62550e1e4c5a178c"
+            ]
+        ]
+    },
+    {
+        "id": "46e6987125fe903f",
+        "type": "catch",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "scope": [
+            "44b55dc28b8fa719",
+            "7b7587392a17ae6d"
+        ],
+        "uncaught": false,
+        "x": 770,
+        "y": 940,
+        "wires": [
+            [
+                "448bac876681ca41"
+            ]
+        ]
+    },
+    {
+        "id": "32f4fc577122ee48",
+        "type": "debug",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'could not read store file'",
+        "statusType": "jsonata",
+        "x": 1170,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "a1043337dcb8e8ee",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "let Store = flow.get('file-based-key-value-store')\n\nlet KeyList = []\nfor (let Key in Store) { KeyList.push(Key) }\n\nmsg.payload    = JSON.stringify(KeyList)\nmsg.statusCode = 200\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 220,
+        "wires": [
+            [
+                "1c4efc5a7854f1ea"
+            ]
+        ]
+    },
+    {
+        "id": "cb4c11162be70a15",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "let Key = msg.req.params.key\nif (Key.length > 255) {\n  msg.payload    = 'Bad Request: key too long'\n  msg.statusCode = 400\n  return [null,msg,null]\n}\n\nlet Store = flow.get('file-based-key-value-store')\nif (Key in Store) {\n  msg.payload    = Store[Key]\n  msg.statusCode = 200\n  return [msg,null,null]\n} else {\n  msg.payload    = 'Not Found'\n  msg.statusCode = 404\n  return [null,null,msg]\n}\n",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 280,
+        "wires": [
+            [
+                "1c4efc5a7854f1ea"
+            ],
+            [
+                "b90889922967b49d"
+            ],
+            [
+                "8ff006085eff306a"
+            ]
+        ]
+    },
+    {
+        "id": "1e72a419b7239656",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "set entry",
+        "url": "file-based-key-value-store/:key(*)",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 740,
+        "y": 340,
+        "wires": [
+            [
+                "7f06d574cc6fd5ec"
+            ]
+        ]
+    },
+    {
+        "id": "5244917e16ae36cd",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete entry",
+        "url": "file-based-key-value-store/:key(*)",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 750,
+        "y": 400,
+        "wires": [
+            [
+                "df6add916b7b5128"
+            ]
+        ]
+    },
+    {
+        "id": "c195a92d3f3d5a6f",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete all",
+        "url": "file-based-key-value-store/",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 740,
+        "y": 460,
+        "wires": [
+            [
+                "f8bd68fd8f381862"
+            ]
+        ]
+    },
+    {
+        "id": "f8bd68fd8f381862",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "flow.set('file-based-key-value-store',Object.create(null))\n\nmsg.payload    = ''\nmsg.statusCode = 204\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 460,
+        "wires": [
+            [
+                "cd6716aa2ba4d753"
+            ]
+        ]
+    },
+    {
+        "id": "448bac876681ca41",
+        "type": "change",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "report in payload",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "_payload",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "'Internal Server Error'",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "statusCode",
+                "pt": "msg",
+                "to": "500",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 950,
+        "y": 940,
+        "wires": [
+            [
+                "9cfa3b8f9c6b9b1a",
+                "62550e1e4c5a178c"
+            ]
+        ]
+    },
+    {
+        "id": "55d668e7b15766d1",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1190,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "7f06d574cc6fd5ec",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "if (\n  ! msg.req.headers['content-type'].startsWith('text/plain')\n) {\n  msg.payload    = 'Unsupported Media Type'\n  msg.statusCode = 415\n  return [null,null,msg]\n}\n\nlet Key = msg.req.params.key\nif (Key.length > 255) {\n  msg.payload    = 'Bad Request: key too long'\n  msg.statusCode = 400\n  return [null,msg,null]\n}\n\nlet Value = msg.payload\nif (Value.length > 1024*1024-1) {\n  msg.payload    = 'Bad Request: value too long'\n  msg.statusCode = 400\n  return [null,msg,null]\n}\n\nlet Store = flow.get('file-based-key-value-store')\nStore[Key] = Value\n\nmsg.payload    = ''\nmsg.statusCode = 204\nreturn [msg,null,null]",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 340,
+        "wires": [
+            [
+                "cd6716aa2ba4d753"
+            ],
+            [
+                "b90889922967b49d"
+            ],
+            [
+                "2f94f3757c0cc5b5"
+            ]
+        ]
+    },
+    {
+        "id": "01199169951224f5",
+        "type": "comment",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "File I/O Components",
+        "info": "",
+        "x": 770,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "b90889922967b49d",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "400",
+        "headers": {
+            "content-type": "text/plain"
+        },
+        "x": 1180,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "df6add916b7b5128",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "let Key = msg.req.params.key\nif (Key.length > 255) {\n  msg.payload    = 'Bad Request: key too long'\n  msg.statusCode = 400\n  return [null,msg]\n}\n\nlet Store = flow.get('file-based-key-value-store')\ndelete Store[Key]\n\nmsg.payload    = ''\nmsg.statusCode = 204\nreturn [msg,null]",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 400,
+        "wires": [
+            [
+                "cd6716aa2ba4d753"
+            ],
+            [
+                "b90889922967b49d"
+            ]
+        ]
+    },
+    {
+        "id": "2f94f3757c0cc5b5",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "415",
+        "headers": {},
+        "x": 1180,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "8ff006085eff306a",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "404",
+        "headers": {
+            "content-type": "text/plain"
+        },
+        "x": 1180,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "1436a35036dbf908",
+        "type": "reusable-in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "read or create Store",
+        "info": "describe your reusable flow here",
+        "scope": "local",
+        "x": 780,
+        "y": 580,
+        "wires": [
+            [
+                "be87bcb9b542a1d5"
+            ]
+        ]
+    },
+    {
+        "id": "7149081147e8a8ec",
+        "type": "reusable-in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "write Store",
+        "info": "describe your reusable flow here",
+        "scope": "local",
+        "x": 750,
+        "y": 820,
+        "wires": [
+            [
+                "8ab9c7327620965d"
+            ]
+        ]
+    },
+    {
+        "id": "bf0e5aac792269d8",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "return",
+        "position": 1,
+        "x": 1190,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "62550e1e4c5a178c",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "return",
+        "position": 1,
+        "x": 1190,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "4a5d9b9eccb368af",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "read or create store",
+        "outputs": 1,
+        "x": 980,
+        "y": 160,
+        "wires": [
+            [
+                "6c234a836c9c575e"
+            ]
+        ]
+    },
+    {
+        "id": "c76dc427ee262830",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "write store",
+        "outputs": 1,
+        "x": 1070,
+        "y": 760,
+        "wires": [
+            [
+                "bf0e5aac792269d8"
+            ]
+        ]
+    },
+    {
+        "id": "cd6716aa2ba4d753",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "write store",
+        "outputs": 1,
+        "x": 1090,
+        "y": 460,
+        "wires": [
+            [
+                "55d668e7b15766d1"
+            ]
+        ]
+    }
+]
