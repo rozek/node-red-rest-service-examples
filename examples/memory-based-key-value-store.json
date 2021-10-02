@@ -1,0 +1,334 @@
+[
+    {
+        "id": "dd55c2d6659b54d8",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "list keys",
+        "url": "memory-based-key-value-store/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 70,
+        "y": 220,
+        "wires": [
+            [
+                "3dd9eb04c17cd9db"
+            ]
+        ]
+    },
+    {
+        "id": "3c55745e525b1a88",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 520,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "3dd9eb04c17cd9db",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "let Store = flow.get('memory-based-key-value-store')\n\nlet KeyList = []\nfor (let Key in Store) { KeyList.push(Key) }\n\nmsg.payload    = JSON.stringify(KeyList)\nmsg.statusCode = 200\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 220,
+        "wires": [
+            [
+                "3c55745e525b1a88"
+            ]
+        ]
+    },
+    {
+        "id": "f59bd048dd1378fb",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "initialize",
+        "func": "flow.set('memory-based-key-value-store',Object.create(null))\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 160,
+        "wires": [
+            [
+                "241f05ccccad671d"
+            ]
+        ]
+    },
+    {
+        "id": "1f11e0582568178c",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "get entry",
+        "url": "memory-based-key-value-store/:key(*)",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 280,
+        "wires": [
+            [
+                "1cc62b9e4dce5759"
+            ]
+        ]
+    },
+    {
+        "id": "f8268308adc193ef",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "set entry",
+        "url": "memory-based-key-value-store/:key(*)",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 340,
+        "wires": [
+            [
+                "2688d816444d0a8f"
+            ]
+        ]
+    },
+    {
+        "id": "024a4e81d804602c",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete entry",
+        "url": "memory-based-key-value-store/:key(*)",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 400,
+        "wires": [
+            [
+                "4db778ae9986db10"
+            ]
+        ]
+    },
+    {
+        "id": "a4983be794af7a74",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete all",
+        "url": "memory-based-key-value-store/",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 460,
+        "wires": [
+            [
+                "c9884a3ca4cc3c6f"
+            ]
+        ]
+    },
+    {
+        "id": "9183908bc72a6240",
+        "type": "comment",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "memory-based key-value-store (at /memory-based-key-value-store)",
+        "info": "",
+        "x": 260,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "2399a683f3d62491",
+        "type": "inject",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "at Startup",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "f59bd048dd1378fb"
+            ]
+        ]
+    },
+    {
+        "id": "241f05ccccad671d",
+        "type": "debug",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "Status",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'initialized'",
+        "statusType": "jsonata",
+        "x": 430,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "ac07b09f969d7b7d",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "400",
+        "headers": {
+            "content-type": "text/plain"
+        },
+        "x": 520,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "a07079d99705105d",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "415",
+        "headers": {},
+        "x": 520,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "40299c05666566ae",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "404",
+        "headers": {
+            "content-type": "text/plain"
+        },
+        "x": 520,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "1cc62b9e4dce5759",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "let Key = msg.req.params.key\nif (Key.length > 255) {\n  msg.payload    = 'Bad Request: key too long'\n  msg.statusCode = 400\n  return [null,msg,null]\n}\n\nlet Store = flow.get('memory-based-key-value-store')\nif (Key in Store) {\n  msg.payload    = Store[Key]\n  msg.statusCode = 200\n  return [msg,null,null]\n} else {\n  msg.payload    = 'Not Found'\n  msg.statusCode = 404\n  return [null,null,msg]\n}\n",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 280,
+        "wires": [
+            [
+                "3c55745e525b1a88"
+            ],
+            [
+                "ac07b09f969d7b7d"
+            ],
+            [
+                "40299c05666566ae"
+            ]
+        ]
+    },
+    {
+        "id": "c9884a3ca4cc3c6f",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "flow.set('memory-based-key-value-store',Object.create(null))\n\nmsg.payload    = ''\nmsg.statusCode = 204\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 460,
+        "wires": [
+            [
+                "396ca5d0febba129"
+            ]
+        ]
+    },
+    {
+        "id": "2688d816444d0a8f",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "if (\n  ! msg.req.headers['content-type'].startsWith('text/plain')\n) {\n  msg.payload    = 'Unsupported Media Type'\n  msg.statusCode = 415\n  return [null,null,msg]\n}\n\nlet Key = msg.req.params.key\nif (Key.length > 255) {\n  msg.payload    = 'Bad Request: key too long'\n  msg.statusCode = 400\n  return [null,msg,null]\n}\n\nlet Value = msg.payload\nif (Value.length > 1024*1024-1) {\n  msg.payload    = 'Bad Request: value too long'\n  msg.statusCode = 400\n  return [null,msg,null]\n}\n\nlet Store = flow.get('memory-based-key-value-store')\nStore[Key] = Value\n\nmsg.payload    = ''\nmsg.statusCode = 204\nreturn [msg,null,null]",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 340,
+        "wires": [
+            [
+                "396ca5d0febba129"
+            ],
+            [
+                "ac07b09f969d7b7d"
+            ],
+            [
+                "a07079d99705105d"
+            ]
+        ]
+    },
+    {
+        "id": "4db778ae9986db10",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "func": "let Key = msg.req.params.key\nif (Key.length > 255) {\n  msg.payload    = 'Bad Request: key too long'\n  msg.statusCode = 400\n  return [null,msg]\n}\n\nlet Store = flow.get('memory-based-key-value-store')\ndelete Store[Key]\n\nmsg.payload    = ''\nmsg.statusCode = 204\nreturn [msg,null]",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 400,
+        "wires": [
+            [
+                "396ca5d0febba129"
+            ],
+            [
+                "ac07b09f969d7b7d"
+            ]
+        ]
+    },
+    {
+        "id": "396ca5d0febba129",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "204",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 520,
+        "y": 280,
+        "wires": []
+    }
+]
