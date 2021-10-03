@@ -26,6 +26,16 @@ Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
 ## Key-Value Stores ##
 
+"Key-Value Stores" behave a bit like dictionaries: you choose a key word and read or write an associated value. If your data can be indexed by such "keys" and you always handle data records (i.e., values) as a whole, key-value-stores are a convenient method to store such data.
+
+There are a lot of professional key-value-stores, usually designed to handle large amounts of data efficiently and reliably, often able to distribute the whole data set among multiple nodes for better scalabality - but if you just need a small store for a few thousand keys and/or values with a size of up to approx. 1 MB, it may be simpler to implement that store in Node-RED itself.
+
+The following examples show three different implementations:
+
+* a "Memory-based Key-Value-Store" which does not write anything to disk,
+* a "File-based Key-Value-Store" which keeps all data in a single file and
+* a "Folder-based Key-Value-Store" which writes the value of each key into its own file within a hierarchical structure of folders. 
+
 ### Memory-based Key-Value-Store ###
 
 In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted:
