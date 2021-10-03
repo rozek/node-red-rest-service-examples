@@ -44,6 +44,8 @@ In the simplest case, the whole key-value-store may just be kept in memory - kno
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
+In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your NOde-RED workspace and deploy.
+
 ### File-based Key-Value-Store ###
 
 If the amount of data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
