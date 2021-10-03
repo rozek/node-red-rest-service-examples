@@ -16,6 +16,10 @@ For these examples to be run, it is necessary to install the following extension
 
 * [node-red-contrib-reusable-flows](https://github.com/ollixx/node-red-contrib-reusable-flows)<br>"Reusable Flows" allow multiply needed flows to be defined once and then invoked from multiple places
 
+### Postman ###
+
+Some of the examples described below can be executed more easily if you have [Postman](https://www.postman.com/) installed on your machine.
+
 ## Examples ##
 
 All example specifications are stored in JSON format and may easily be imported into a Node-RED workspace. Preferrably, you should open a separate tab and insert them there.
@@ -44,7 +48,9 @@ In the simplest case, the whole key-value-store may just be kept in memory - kno
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your NOde-RED workspace and deploy.
+In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy.
+
+For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
 ### File-based Key-Value-Store ###
 
@@ -55,6 +61,10 @@ If the amount of data to be kept in a key-value-store is known to be small (let'
 The shown example reads from and writes to a file called `file-based-key-value-store.json` found in the working directory of the running Node-RED instance - if you want to change it, just update the nodes labelled `read Store File` and `write Store File`.
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
+
+In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy.
+
+For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
 ## File Management ##
 
