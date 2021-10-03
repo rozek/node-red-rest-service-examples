@@ -54,7 +54,7 @@ For experimentation purposes, you may import the [Postman collection](PostmanCol
 
 ### File-based Key-Value-Store ###
 
-If the amount of data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
+If the total size of all data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
 
 ![](examples/file-based-key-value-store.png)
 
@@ -65,6 +65,16 @@ Currently, this service is accessible for everybody. But if you combine it with 
 In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy.
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
+
+### Folder-based Key-Value-Store ###
+
+If the total size of all data to be kept in a key-value-store is expected to exceed 10 MB, it may be useful to give the value of each key its own file. Since managing folders with large numbers of files may become difficult, these files should be organized into a hierarchical set of folders. This structure and the fact that the permitted keys may not be directly used as file names makes it necessary to provide an explicit mapping from a store key to the path of a value file.
+
+The following example assumes "universally unique identifiers" (UUIDs) as keys (and file names) and uses the last three hexadecimal digits to route these keys into one of 16\*16\*16 = 2<sup>12</sup> = 4096 folders. Assuming that all used keys are equally distributed, a set of 2<sup>20</sup> (i.e., more than one million) keys will therefore lead to folders containing approx. 2<sup>8</sup>8 = 256 files each.
+
+
+
+
 
 ## File Management ##
 
