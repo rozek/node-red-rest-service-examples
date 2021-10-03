@@ -18,7 +18,7 @@ For these examples to be run, it is necessary to install the following extension
 
 ### Postman ###
 
-Some of the examples described below can be executed more easily if you have [Postman](https://www.postman.com/) installed on your machine.
+Some of the examples described below can be tested more easily if you have [Postman](https://www.postman.com/) installed on your machine.
 
 ## Examples ##
 
