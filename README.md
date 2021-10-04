@@ -87,6 +87,20 @@ For experimentation purposes, you may import the [Postman collection](PostmanCol
 
 ## File Management ##
 
+Sometimes it is desirable to manage the files on a server from remote, e.g. using a web interface. While there are professional solutions such as ftp or WebDAV it is not always possible to install such servers alongside a Node-RED instance.
+
+In such situations, the following example may be helpful which offers the following features:
+
+* directory inspection (file name listing),
+* file upload and download with automatic directory creation,
+* file renaming,
+* file copy and move between directories,
+* file and directory removal
+
+File inspection (including timestamps and size information) is not yet implemented (but could be added if needed)
+
+![](examples/file-management.png)
+
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance
 
 
