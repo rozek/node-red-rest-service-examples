@@ -32,7 +32,7 @@ Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
 "Key-Value Stores" behave a bit like dictionaries: you choose a key word and read or write an associated value. If your data can be indexed by such "keys" and you always handle data records (i.e., values) as a whole, key-value-stores are a convenient method to store such data.
 
-There are a lot of professional key-value-stores, usually designed to handle large amounts of data efficiently and reliably, often able to distribute the whole data set among multiple nodes for better scalabality - but if you just need a small store for a few thousand keys and/or values with a size of up to approx. 1 MB, it may be simpler to implement that store in Node-RED itself.
+There is currently a whole range of professional key-value-stores, usually designed to handle large amounts of data efficiently and reliably, often able to distribute the whole data set among multiple nodes for better scalabality - but if you just need a small store for a few thousand keys and/or values with a size of up to approx. 1 MB each, it may be simpler to implement that store in Node-RED itself.
 
 The following examples show three different implementations:
 
@@ -71,6 +71,9 @@ For experimentation purposes, you may import the [Postman collection](PostmanCol
 If the total size of all data to be kept in a key-value-store is expected to exceed 10 MB, it may be useful to give the value of each key its own file. Since managing folders with large numbers of files may become difficult, these files should be organized into a hierarchical set of folders. This structure and the fact that the permitted keys may not be directly used as file names makes it necessary to provide an explicit mapping from a store key to the path of a value file.
 
 The following example assumes "universally unique identifiers" (UUIDs) as keys (and file names) and uses the last three hexadecimal digits to route these keys into one of 16\*16\*16 = 2<sup>12</sup> = 4096 folders. Assuming that all used keys are equally distributed, a set of 2<sup>20</sup> (i.e., more than one million) keys will therefore result in 4096 folders containing approx. 2<sup>8</sup> = 256 files each.
+
+![](examples/folder-based-key-value-store-I.png)
+![](examples/folder-based-key-value-store-II.png)
 
 
 
