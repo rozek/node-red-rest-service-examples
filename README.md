@@ -16,6 +16,10 @@ For these examples to be run, it is necessary to install the following extension
 
 * [node-red-contrib-reusable-flows](https://github.com/ollixx/node-red-contrib-reusable-flows)<br>"Reusable Flows" allow multiply needed flows to be defined once and then invoked from multiple places
 
+### Postman ###
+
+Some of the examples described below can be tested more easily if you have [Postman](https://www.postman.com/) installed on your machine.
+
 ## Examples ##
 
 All example specifications are stored in JSON format and may easily be imported into a Node-RED workspace. Preferrably, you should open a separate tab and insert them there.
@@ -26,6 +30,16 @@ Alternatively, other tools like [cURL](https://curl.se/) may be used as well.
 
 ## Key-Value Stores ##
 
+"Key-Value Stores" behave a bit like dictionaries: you choose a key word and read or write an associated value. If your data can be indexed by such "keys" and you always handle data records (i.e., values) as a whole, key-value-stores are a convenient method to store such data.
+
+There are a lot of professional key-value-stores, usually designed to handle large amounts of data efficiently and reliably, often able to distribute the whole data set among multiple nodes for better scalabality - but if you just need a small store for a few thousand keys and/or values with a size of up to approx. 1 MB, it may be simpler to implement that store in Node-RED itself.
+
+The following examples show three different implementations:
+
+* a "Memory-based Key-Value-Store" which does not write anything to disk,
+* a "File-based Key-Value-Store" which keeps all data in a single file and
+* a "Folder-based Key-Value-Store" which writes the value of each key into its own file within a hierarchical structure of folders. 
+
 ### Memory-based Key-Value-Store ###
 
 In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted:
@@ -34,15 +48,33 @@ In the simplest case, the whole key-value-store may just be kept in memory - kno
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
+In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy.
+
+For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
+
 ### File-based Key-Value-Store ###
 
-If the amount of data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
+If the total size of all data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
 
 ![](examples/file-based-key-value-store.png)
 
 The shown example reads from and writes to a file called `file-based-key-value-store.json` found in the working directory of the running Node-RED instance - if you want to change it, just update the nodes labelled `read Store File` and `write Store File`.
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
+
+In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy.
+
+For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
+
+### Folder-based Key-Value-Store ###
+
+If the total size of all data to be kept in a key-value-store is expected to exceed 10 MB, it may be useful to give the value of each key its own file. Since managing folders with large numbers of files may become difficult, these files should be organized into a hierarchical set of folders. This structure and the fact that the permitted keys may not be directly used as file names makes it necessary to provide an explicit mapping from a store key to the path of a value file.
+
+The following example assumes "universally unique identifiers" (UUIDs) as keys (and file names) and uses the last three hexadecimal digits to route these keys into one of 16\*16\*16 = 2<sup>12</sup> = 4096 folders. Assuming that all used keys are equally distributed, a set of 2<sup>20</sup> (i.e., more than one million) keys will therefore result in 4096 folders containing approx. 2<sup>8</sup> = 256 files each.
+
+
+
+
 
 ## File Management ##
 
