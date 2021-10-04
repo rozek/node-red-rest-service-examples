@@ -42,19 +42,19 @@ The following examples show three different implementations:
 
 ### Memory-based Key-Value-Store ###
 
-In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted. Values are expected to contain plain text only:
+In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted:
 
 ![](examples/memory-based-key-value-store.png)
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy.
+In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy. Keys are expected to be less than 256 characters long, values must contain plain text with less than 1024<sup>2</sup> characters.
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
 ### File-based Key-Value-Store ###
 
-If the total size of all data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes. Values are again expected to contain nothing but plain text:
+If the total size of all data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes:
 
 ![](examples/file-based-key-value-store.png)
 
@@ -62,7 +62,7 @@ The shown example reads from and writes to a file called `file-based-key-value-s
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy.
+In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy. Keys are expected to be less than 256 characters long, values must contain plain text with less than 1024<sup>2</sup> characters.
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
@@ -72,15 +72,18 @@ If the total size of all data to be kept in a key-value-store is expected to exc
 
 The following example assumes "universally unique identifiers" (UUIDs) of type 4 as keys (and file names) and uses the last three hexadecimal digits to route these keys into one of 16\*16\*16 = 2<sup>12</sup> = 4096 folders. Assuming that all used keys are equally distributed, a set of 2<sup>20</sup> (i.e., more than one million) keys will therefore result in 4096 folders containing approx. 2<sup>8</sup> = 256 files each.
 
-Again, values are expected to contain plain text only. If you plan to use a different type of keys (rather than UUIDs), you will have to modify nodes "Key to Path" and "File Names to Keys" accordingly:
+If you plan to use a different type of keys (rather than UUIDs), you will have to modify nodes "Key to Path" and "File Names to Keys" accordingly:
 
 ![](examples/folder-based-key-value-store-I.png)
 ![](examples/folder-based-key-value-store-II.png)
+
+If you need to generate new UUIDs you may either use an [online UUID generator](https://www.uuidgenerator.net/version4) or the function that comes with this example:
+
 ![](examples/folder-based-key-value-store-III.png)
 
+In order to use this store, simply import its [flow](examples/folder-based-key-value-store.json) into your Node-RED workspace and deploy. Store values may contain less than 1024<sup>2</sup> characters of plain text only.
 
-
-
+For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
 ## File Management ##
 
