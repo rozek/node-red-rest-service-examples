@@ -42,7 +42,7 @@ The following examples show three different implementations:
 
 ### Memory-based Key-Value-Store ###
 
-In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted. Values are expected to contain plain text:
+In the simplest case, the whole key-value-store may just be kept in memory - knowing that all data is lost if the Node-RED server crashes or is restarted. Values are expected to contain plain text only:
 
 ![](examples/memory-based-key-value-store.png)
 
@@ -54,7 +54,7 @@ For experimentation purposes, you may import the [Postman collection](PostmanCol
 
 ### File-based Key-Value-Store ###
 
-If the total size of all data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes. Values are again expected to contain plain text:
+If the total size of all data to be kept in a key-value-store is known to be small (let's say, less than perhaps 10MB) and does not change too often (let's say, less than once a second) it may be written into a single file whenever it changes. Values are again expected to contain nothing but plain text:
 
 ![](examples/file-based-key-value-store.png)
 
@@ -72,7 +72,7 @@ If the total size of all data to be kept in a key-value-store is expected to exc
 
 The following example assumes "universally unique identifiers" (UUIDs) as keys (and file names) and uses the last three hexadecimal digits to route these keys into one of 16\*16\*16 = 2<sup>12</sup> = 4096 folders. Assuming that all used keys are equally distributed, a set of 2<sup>20</sup> (i.e., more than one million) keys will therefore result in 4096 folders containing approx. 2<sup>8</sup> = 256 files each.
 
-Again, values are expected to contain plain text:
+Again, values are expected to contain plain text only:
 
 ![](examples/folder-based-key-value-store-I.png)
 ![](examples/folder-based-key-value-store-II.png)
