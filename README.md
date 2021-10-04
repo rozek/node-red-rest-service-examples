@@ -85,7 +85,7 @@ In order to use this store, simply import its [flow](examples/folder-based-key-v
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
-## File Management ##
+## Simple File Management ##
 
 Sometimes it is desirable to manage the files on a server from remote, e.g. using a web interface. While there are professional solutions such as ftp or WebDAV it is not always possible to install such servers alongside a Node-RED instance.
 
@@ -99,7 +99,8 @@ In such situations, the following example may be helpful which offers the follow
 
 File inspection (including timestamps and size information) is not yet implemented (but could be added if needed)
 
-![](examples/file-management.png)
+![](examples/file-management-I.png)
+![](examples/file-management-II.png)
 
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance
 
