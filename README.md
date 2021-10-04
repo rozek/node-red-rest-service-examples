@@ -76,6 +76,7 @@ Again, values are expected to contain plain text only. If you plan to use a diff
 
 ![](examples/folder-based-key-value-store-I.png)
 ![](examples/folder-based-key-value-store-II.png)
+![](examples/folder-based-key-value-store-III.png)
 
 
 
