@@ -72,7 +72,7 @@ If the total size of all data to be kept in a key-value-store is expected to exc
 
 The following example assumes "universally unique identifiers" (UUIDs) of type 4 as keys (and file names) and uses the last three hexadecimal digits to route these keys into one of 16\*16\*16 = 2<sup>12</sup> = 4096 folders. Assuming that all used keys are equally distributed, a set of 2<sup>20</sup> (i.e., more than one million) keys will therefore result in 4096 folders containing approx. 2<sup>8</sup> = 256 files each.
 
-Again, values are expected to contain plain text only. If you plan to use a different type of keys (rather than UUIDs), you will have to modify nodes "Key to Path" and "File names to Keys" accordingly:
+Again, values are expected to contain plain text only. If you plan to use a different type of keys (rather than UUIDs), you will have to modify nodes "Key to Path" and "File Names to Keys" accordingly:
 
 ![](examples/folder-based-key-value-store-I.png)
 ![](examples/folder-based-key-value-store-II.png)
