@@ -1,0 +1,695 @@
+[
+    {
+        "id": "c0606bb9341ca7f3",
+        "type": "comment",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "folder-based key-value-store (at /folder-based-key-value-store)",
+        "info": "",
+        "x": 1570,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "7e256d4a994d3793",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "list keys",
+        "url": "folder-based-key-value-store/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1390,
+        "y": 160,
+        "wires": [
+            [
+                "174d1cb66691a731"
+            ]
+        ]
+    },
+    {
+        "id": "b7cc94caa4f355b6",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "get entry",
+        "url": "folder-based-key-value-store/:key",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1400,
+        "y": 220,
+        "wires": [
+            [
+                "b3165a503fb4df75"
+            ]
+        ]
+    },
+    {
+        "id": "84eeaa7465749a29",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "set entry",
+        "url": "folder-based-key-value-store/:key(*)",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1400,
+        "y": 280,
+        "wires": [
+            [
+                "bb259aab3607419c"
+            ]
+        ]
+    },
+    {
+        "id": "ebac4fb85e50ac75",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete entry",
+        "url": "folder-based-key-value-store/:key(*)",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1410,
+        "y": 340,
+        "wires": [
+            [
+                "079b183cd6ca968e"
+            ]
+        ]
+    },
+    {
+        "id": "fd4645652555cc74",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete all",
+        "url": "folder-based-key-value-store/",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1400,
+        "y": 400,
+        "wires": [
+            [
+                "8c285571e842d239"
+            ]
+        ]
+    },
+    {
+        "id": "8b7bbc576fcf6321",
+        "type": "reusable-in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "Key to Path",
+        "info": "describe your reusable flow here",
+        "scope": "local",
+        "x": 1410,
+        "y": 640,
+        "wires": [
+            [
+                "626937bfd3f37129"
+            ]
+        ]
+    },
+    {
+        "id": "d26d596ae7481c19",
+        "type": "comment",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "Mapping between Keys and File Names or Paths",
+        "info": "",
+        "x": 1520,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "626937bfd3f37129",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "do it",
+        "func": "  const UUIDPattern = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i\n\n  let Key = msg.req.params.key\n  if (UUIDPattern.test(Key) == false) {\n    msg.payload    = 'Bad Request: invalid key'\n    msg.statusCode = 400\n    return [null,msg]\n  }\n\n  msg.EntryKey = Key\n    let Digit_1 = Key[Key.length-1]\n    let Digit_2 = Key[Key.length-2]\n    let Digit_3 = Key[Key.length-3]\n  msg.FilePath = path.join(\n    'folder-based-key-value-store', Digit_3, Digit_2, Digit_1, Key + '.data'\n  )\n  return [msg,null]\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 1570,
+        "y": 640,
+        "wires": [
+            [
+                "cb54046004fe583b"
+            ],
+            [
+                "950d77a1b6cbbf89"
+            ]
+        ]
+    },
+    {
+        "id": "cb54046004fe583b",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "valid",
+        "position": 1,
+        "x": 1710,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "950d77a1b6cbbf89",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "invalid",
+        "position": "2",
+        "x": 1710,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "079b183cd6ca968e",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "key to path",
+        "outputs": 2,
+        "x": 1570,
+        "y": 340,
+        "wires": [
+            [
+                "47fa3b2cec05dd5c"
+            ],
+            [
+                "b4caf0d80a9c78a3"
+            ]
+        ]
+    },
+    {
+        "id": "bb259aab3607419c",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "key to path",
+        "outputs": 2,
+        "x": 1570,
+        "y": 280,
+        "wires": [
+            [
+                "3c153d419caec02c"
+            ],
+            [
+                "b4caf0d80a9c78a3"
+            ]
+        ]
+    },
+    {
+        "id": "b3165a503fb4df75",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "key to path",
+        "outputs": 2,
+        "x": 1570,
+        "y": 220,
+        "wires": [
+            [
+                "a99e0ca67bab84ef"
+            ],
+            [
+                "b4caf0d80a9c78a3"
+            ]
+        ]
+    },
+    {
+        "id": "237e0ab2fcd7b9b7",
+        "type": "reusable-in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "File Names to Keys",
+        "info": "describe your reusable flow here",
+        "scope": "local",
+        "x": 1430,
+        "y": 720,
+        "wires": [
+            [
+                "5289c352dcb38cb6"
+            ]
+        ]
+    },
+    {
+        "id": "5289c352dcb38cb6",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "do it",
+        "func": "  msg.payload = JSON.stringify(msg.payload.map(\n    (FileName) => path.basename(FileName,'.data')\n  ))\n\n  return [msg,null]\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 1610,
+        "y": 720,
+        "wires": [
+            [
+                "e1371ac0076c48d8"
+            ],
+            [
+                "b76a3c6b2953e0be"
+            ]
+        ]
+    },
+    {
+        "id": "e1371ac0076c48d8",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "valid",
+        "position": 1,
+        "x": 1750,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "b76a3c6b2953e0be",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "invalid",
+        "position": "2",
+        "x": 1750,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "d721ce46e53ad532",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "file names to keys",
+        "outputs": 2,
+        "x": 1770,
+        "y": 160,
+        "wires": [
+            [
+                "2bcfc7eac4f2a10d"
+            ],
+            [
+                "b00db0f4e4fda08e"
+            ]
+        ]
+    },
+    {
+        "id": "2bcfc7eac4f2a10d",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1440,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "357696d2d26ca072",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "204",
+        "headers": {},
+        "x": 1600,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "b4caf0d80a9c78a3",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "400",
+        "headers": {},
+        "x": 1440,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "73c7515972b86e10",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 1600,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c96721539826fba5",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "415",
+        "headers": {},
+        "x": 1760,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "b00db0f4e4fda08e",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 1760,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "174d1cb66691a731",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "list all Files",
+        "func": "  function processFolder (FolderPath, Callback) {\n    fs.readdir(FolderPath, (Error,FileList) => {\n      if (Error == null) {\n        function inspectNextEntry (Error) {   // inspect one entry after another\n          if (Error != null) { return Callback(Error) }\n\n          if (FileList.length > 0) {\n            let FileName = FileList.shift()\n            if (FileName === '.DS_Store') {       // very special case for macOS\n              return inspectNextEntry()\n            } else {\n              fs.stat(path.join(FolderPath,FileName), (Error,FileInfo) => {\n                if (Error == null) {\n                  switch (true) {\n                    case FileInfo.isDirectory():     // inspect folder & proceed\n                      return processFolder(\n                        path.join(FolderPath,FileName),inspectNextEntry\n                      )\n                    case FileInfo.isFile():           // remember file & proceed\n                      if (path.extname(FileName) === '.data') {\n                        Result.push(FileName)\n                      }\n                  }                        // ignore anything else, just proceed\n                }\n                return inspectNextEntry()\n              })\n            }\n          } else {                      // no more entries to process, call back\n            return Callback()\n          }\n        }\n        return inspectNextEntry()\n      } else {\n        if (Error.code === 'ENOENT') {\n          return Callback()\n        } else {\n          msg.payload    = 'Internal Server Error'\n          msg.statusCode = 500\n          msg.error      = Error\n          return Callback(Error)\n        }\n      }\n    })\n  }\n\n  let Result = []\n  processFolder(path.join(process.cwd(),'folder-based-key-value-store'), (Error) => {\n    if (Error == null) {\n      msg.payload    = Result\n      msg.statusCode = 200\n      node.send([msg,null])\n    } else {\n      node.send([null,msg])\n    }\n    node.done()\n  })\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            },
+            {
+                "var": "fs",
+                "module": "fs"
+            }
+        ],
+        "x": 1570,
+        "y": 160,
+        "wires": [
+            [
+                "d721ce46e53ad532"
+            ],
+            [
+                "b00db0f4e4fda08e"
+            ]
+        ]
+    },
+    {
+        "id": "a99e0ca67bab84ef",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "read File",
+        "func": "  let FilePath = msg.FilePath\n  fs.readFile(FilePath, (Error,Result) => {\n    if (Error == null) {\n      msg.payload    = Result\n      msg.statusCode = 200\n\n      node.send([msg,null,null])\n      node.done()\n    } else {\n      if (Error.code === 'ENOENT') {\n        msg.payload    = 'Not Found'\n        msg.statusCode = 404\n        msg.error      = Error\n        \n        node.send([null,msg,null])\n      } else {\n        msg.payload    = 'Internal Server Error'\n        msg.statusCode = 500\n        msg.error      = Error\n        \n        node.send([null,null,msg])\n      }\n\n      node.done()\n    }\n  })\n",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            }
+        ],
+        "x": 1740,
+        "y": 220,
+        "wires": [
+            [
+                "2bcfc7eac4f2a10d"
+            ],
+            [
+                "73c7515972b86e10"
+            ],
+            [
+                "b00db0f4e4fda08e"
+            ]
+        ]
+    },
+    {
+        "id": "3c153d419caec02c",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "write File",
+        "func": "  if (\n    ! msg.req.headers['content-type'].startsWith('text/plain')\n  ) {\n    msg.payload    = 'Unsupported Media Type'\n    msg.statusCode = 415\n    return [null,null,msg,null]\n  }\n\n  let Value = msg.payload\n  if (Value.length > 1024*1024-1) {\n    msg.payload    = 'Bad Request: value too long'\n    msg.statusCode = 400\n    return [null,msg,null,null]\n  }\n\n  function finishWith (Error) {\n    if (Error == null) {\n      msg.payload    = ''\n      msg.statusCode = 204\n\n      node.send([msg,null,null,null])\n    } else {\n      msg.payload    = 'Internal Server Error'\n      msg.statusCode = 500\n      msg.error      = Error\n\n      node.send([null,null,null,msg])\n    }\n    node.done()\n  }\n\n  let FilePath   = msg.FilePath\n  let FolderPath = path.dirname(FilePath)\n  fs.mkdir(FolderPath, { recursive:true }, (Error) => {\n    if (Error == null) {\n      fs.writeFile(FilePath, Value, (Error) => finishWith(Error))\n    } else {\n      finishWith(Error)\n    }\n  })\n",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 1740,
+        "y": 280,
+        "wires": [
+            [
+                "357696d2d26ca072"
+            ],
+            [
+                "b4caf0d80a9c78a3"
+            ],
+            [
+                "c96721539826fba5"
+            ],
+            [
+                "b00db0f4e4fda08e"
+            ]
+        ]
+    },
+    {
+        "id": "47fa3b2cec05dd5c",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete File",
+        "func": "  function finishWith (Error) {\n    if ((Error == null) || (Error.code === 'ENOENT')) {\n      msg.payload    = ''\n      msg.statusCode = 204\n\n      node.send([msg,null])\n    } else {\n      msg.payload    = 'Internal Server Error'\n      msg.statusCode = 500\n      msg.error      = Error\n\n      node.send([null,msg])\n    }\n    node.done()\n  }\n\n  let FilePath = msg.FilePath\n  fs.stat(FilePath, (Error,FileInfo) => {\n    if (Error == null) {\n      if (FileInfo.isFile()) {\n        fs.unlink(FilePath, (Error) => finishWith(Error))\n      } else {\n        finishWith({ code:'ENOFILE' }) // DRY\n      }\n    } else {\n      finishWith(Error)\n    }\n  })\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            }
+        ],
+        "x": 1750,
+        "y": 340,
+        "wires": [
+            [
+                "357696d2d26ca072"
+            ],
+            [
+                "b00db0f4e4fda08e"
+            ]
+        ]
+    },
+    {
+        "id": "8c285571e842d239",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "delete all Files",
+        "func": "  function finishWith (Error) {\n    if ((Error == null) || (Error.code === 'ENOENT')) {\n      msg.payload    = ''\n      msg.statusCode = 204\n\n      node.send([msg,null])\n    } else {\n      msg.payload    = 'Internal Server Error'\n      msg.statusCode = 500\n      msg.error      = Error\n\n      node.send([null,msg])\n    }\n    node.done()\n  }\n\n  let FolderPath = path.join(process.cwd(),'folder-based-key-value-store')\n  fs.rmdir(FolderPath, { recursive:true }, (Error) => {\n    if (Error == null) {\n      fs.mkdir(FolderPath, (Error) => finishWith(Error))\n    } else {\n      finishWith(Error)\n    }\n  })\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            }
+        ],
+        "x": 1580,
+        "y": 400,
+        "wires": [
+            [
+                "357696d2d26ca072"
+            ],
+            [
+                "b00db0f4e4fda08e"
+            ]
+        ]
+    },
+    {
+        "id": "a18bad02b6b7ed72",
+        "type": "comment",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "Generation of Type-4 UUIDs",
+        "info": "",
+        "x": 1460,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "ec7272d518a1be57",
+        "type": "http in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "url": "uuid",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1400,
+        "y": 920,
+        "wires": [
+            [
+                "29539599df5a72e3"
+            ]
+        ]
+    },
+    {
+        "id": "0f07f560b74dbe54",
+        "type": "reusable-in",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "new UUID",
+        "info": "generates a new Type-4 UUID and writes it into `msg.payload`",
+        "scope": "local",
+        "x": 1410,
+        "y": 860,
+        "wires": [
+            [
+                "5ab5409eb7ab97c7"
+            ]
+        ]
+    },
+    {
+        "id": "5ab5409eb7ab97c7",
+        "type": "function",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "generate",
+        "func": "  let Id = '', IdPart\n  IdPart = Math.round(Math.random()*0xffffffff).toString(16)\n    Id += IdPart + '00000000'.slice(IdPart.length) + '-'\n    IdPart = Math.round(Math.random()*0xffff).toString(16)\n    Id += IdPart + '0000'.slice(IdPart.length) + '-4'\n    IdPart = Math.round(Math.random()*0xfff).toString(16)\n    Id += IdPart + '000'.slice(IdPart.length) + '-'\n    IdPart = Math.round(Math.random()*0x3fff+0x8000).toString(16)\n    Id += IdPart + '-'\n    IdPart = Math.round(Math.random()*0xffffffffffff).toString(16)\n    Id += IdPart + '000000000000'.slice(IdPart.length)\n  msg.payload = Id.toLowerCase()\n  return msg\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 1580,
+        "y": 860,
+        "wires": [
+            [
+                "0aa9c45a7f30f878"
+            ]
+        ]
+    },
+    {
+        "id": "0aa9c45a7f30f878",
+        "type": "reusable-out",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "return",
+        "position": 1,
+        "x": 1730,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "29539599df5a72e3",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "new uuid",
+        "outputs": 1,
+        "x": 1570,
+        "y": 920,
+        "wires": [
+            [
+                "ea2c035d80373317"
+            ]
+        ]
+    },
+    {
+        "id": "ea2c035d80373317",
+        "type": "http response",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1730,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "2aba871b2e23f6e9",
+        "type": "inject",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "generate UUID",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 1440,
+        "y": 980,
+        "wires": [
+            [
+                "2ef761f6434e9dc0"
+            ]
+        ]
+    },
+    {
+        "id": "2ef761f6434e9dc0",
+        "type": "reusable",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "target": "new uuid",
+        "outputs": 1,
+        "x": 1630,
+        "y": 980,
+        "wires": [
+            [
+                "d34781c050d3d816"
+            ]
+        ]
+    },
+    {
+        "id": "d34781c050d3d816",
+        "type": "debug",
+        "z": "c42cabcdbd6f8dfe",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "'see debug console'",
+        "statusType": "jsonata",
+        "x": 1810,
+        "y": 980,
+        "wires": []
+    }
+]
