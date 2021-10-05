@@ -55,10 +55,10 @@ In order to use this store, simply import its [flow](examples/memory-based-key-v
 As shown in the flow, all fundamental operations of a Key-Value Store are implemented as HTTP endpoints
 
 * **list the keys of all stored entries**<br>`GET memory-based-key-value-store/`<br>responds with a JSON document containing a (possibly empty) array with the keys of all entries found in the store
-* **retrieve the value of a specific entry**<br>`GET memory-based-key-value-store/<key>`<br>responds with a text document containg the (possibly empty) value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found")
-* **set the value of a specific entry**<br>
-* **delete a specific entry**<br>
-* **delete all entries**<br>
+* **retrieve the value of a specific entry**<br>`GET memory-based-key-value-store/<key>`<br>responds with a text document containg the (possibly empty) value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found"). Keys must be less than 256 characters long, values less than 1024<sup>2</sup> characters
+* **set the value of a specific entry**<br>`SET memory-based-key-value-store/<key>`<br>expects the request body to contain a text document with the value the store entry identified by the "key" given in the request URL should be set to. If such an entry does not yet exist, it will be created - otherwise the previously stored value will be overwritten. Keys must be less than 256 characters long, values less than 1024<sup>2</sup> characters
+* **delete a specific entry**<br>`DELETE memory-based-key-value-store/<key>`<br>removes the entry identified by the "key" given in the request URL from the store - provided that such an entry exists, otherwise the request will simply be ignored (it is therefore safe to delete non-existing entries)
+* **delete all entries**<br>`DELETE memory-based-key-value-store`<br>removes all currently stored entries from the store - provided that the store is not empty, otherwise the request will simply be ignored (it is therefore safe to clear an empty store)
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
