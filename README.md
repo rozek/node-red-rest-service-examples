@@ -48,14 +48,14 @@ In the simplest case, the whole key-value-store may just be kept in memory - kno
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy. Keys are expected to be less than 256 characters long, values must contain plain text with less than 1024<sup>2</sup> characters.
+In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy.
 
 #### How to use the Store ####
 
 As shown in the flow, all fundamental operations of a Key-Value Store are implemented as HTTP endpoints
 
 * **list the keys of all stored entries**<br>`GET memory-based-key-value-store/`<br>returns a JSON document containing a (possibly empty) array with the keys of all entries found in the store
-* **retrieve the value of a specific entry**<br>`GET memory-based-key-value-store/<key>`<br>returns a text document containg the value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found"). In this example, keys must be less than 256 characters long, values less than 1024<sup>2</sup> characters (but this may be changed by modifying the functions found in the flow)
+* **retrieve the value of a specific entry**<br>`GET memory-based-key-value-store/<key>`<br>returns a text document containg the value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found"). In this example, keys must be less than 256 characters long, and values will contain less than 1024<sup>2</sup> characters (but this may be changed by modifying the functions found in the flow)
 * **set the value of a specific entry**<br>`SET memory-based-key-value-store/<key>`<br>expects the request body to contain a text document with the value the store entry identified by the "key" given in the request URL should be set to. If such an entry does not yet exist, it will be created - otherwise the previously stored value will be overwritten. In this example, keys must be less than 256 characters long, values less than 1024<sup>2</sup> characters (but this may be changed by modifying the functions found in the flow)
 * **delete a specific entry**<br>`DELETE memory-based-key-value-store/<key>`<br>removes the entry identified by the "key" given in the request URL from the store - provided that such an entry exists, otherwise the request will simply be ignored (it is therefore safe to delete non-existing entries)
 * **delete all entries**<br>`DELETE memory-based-key-value-store`<br>removes all currently stored entries from the store - provided that the store is not empty, otherwise the request will simply be ignored (it is therefore safe to clear an empty store)
@@ -72,7 +72,17 @@ The shown example reads from and writes to a file called `file-based-key-value-s
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy. Keys are expected to be less than 256 characters long, values must contain plain text with less than 1024<sup>2</sup> characters.
+In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy.
+
+#### How to use the Store ####
+
+As shown in the flow, all fundamental operations of a Key-Value Store are implemented as HTTP endpoints
+
+* **list the keys of all stored entries**<br>`GET file-based-key-value-store/`<br>returns a JSON document containing a (possibly empty) array with the keys of all entries found in the store
+* **retrieve the value of a specific entry**<br>`GET file-based-key-value-store/<key>`<br>returns a text document containg the value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found"). In this example, keys must be less than 256 characters long, and values will contain less than 1024<sup>2</sup> characters (but this may be changed by modifying the functions found in the flow)
+* **set the value of a specific entry**<br>`SET file-based-key-value-store/<key>`<br>expects the request body to contain a text document with the value the store entry identified by the "key" given in the request URL should be set to. If such an entry does not yet exist, it will be created - otherwise the previously stored value will be overwritten. In this example, keys must be less than 256 characters long, values less than 1024<sup>2</sup> characters (but this may be changed by modifying the functions found in the flow)
+* **delete a specific entry**<br>`DELETE file-based-key-value-store/<key>`<br>removes the entry identified by the "key" given in the request URL from the store - provided that such an entry exists, otherwise the request will simply be ignored (it is therefore safe to delete non-existing entries)
+* **delete all entries**<br>`DELETE file-based-key-value-store`<br>removes all currently stored entries from the store - provided that the store is not empty, otherwise the request will simply be ignored (it is therefore safe to clear an empty store)
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
@@ -91,7 +101,17 @@ If you need to generate new UUIDs you may either use an [online UUID generator](
 
 ![](examples/folder-based-key-value-store-III.png)
 
-In order to use this store, simply import its [flow](examples/folder-based-key-value-store.json) into your Node-RED workspace and deploy. Store values may contain less than 1024<sup>2</sup> characters of plain text only.
+In order to use this store, simply import its [flow](examples/folder-based-key-value-store.json) into your Node-RED workspace and deploy.
+
+#### How to use the Store ####
+
+As shown in the flow, all fundamental operations of a Key-Value Store are implemented as HTTP endpoints
+
+* **list the keys of all stored entries**<br>`GET folder-based-key-value-store/`<br>returns a JSON document containing a (possibly empty) array with the UUIDs of all entries found in the store
+* **retrieve the value of a specific entry**<br>`GET folder-based-key-value-store/<uuid>`<br>returns a text document containg the value of a store entry identified by the "uuid" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found"). In this example, values will be less than 1024<sup>2</sup> characters long (but this may be changed by modifying the functions found in the flow)
+* **set the value of a specific entry**<br>`SET folder-based-key-value-store/<uuid>`<br>expects the request body to contain a text document with the value the store entry identified by the "uuid" given in the request URL should be set to. If such an entry does not yet exist, it will be created - otherwise the previously stored value will be overwritten. In this example, values must be less than 1024<sup>2</sup> characters long (but this may be changed by modifying the functions found in the flow)
+* **delete a specific entry**<br>`DELETE folder-based-key-value-store/<uuid>`<br>removes the entry identified by the "uuid" given in the request URL from the store - provided that such an entry exists, otherwise the request will simply be ignored (it is therefore safe to delete non-existing entries)
+* **delete all entries**<br>`DELETE folder-based-key-value-store`<br>removes all currently stored entries from the store - provided that the store is not empty, otherwise the request will simply be ignored (it is therefore safe to clear an empty store)
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
