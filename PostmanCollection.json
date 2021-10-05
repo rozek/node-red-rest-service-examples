@@ -664,7 +664,7 @@
 					"response": []
 				},
 				{
-					"name": "upload new text-file into new folder",
+					"name": "upload new image-file into new folder",
 					"request": {
 						"method": "POST",
 						"header": [],
