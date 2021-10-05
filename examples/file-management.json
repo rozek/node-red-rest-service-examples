@@ -1,0 +1,729 @@
+[
+    {
+        "id": "122842218533327a",
+        "type": "comment",
+        "z": "1a41b95966463dc1",
+        "name": "simple File Management (at /file-management)",
+        "info": "",
+        "x": 190,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "74ca61895c5b4290",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "get File",
+        "url": "file-management/:path(*)",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 70,
+        "y": 160,
+        "wires": [
+            [
+                "8e151591b9ee0ff3"
+            ]
+        ]
+    },
+    {
+        "id": "692b361e691917ee",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "put File",
+        "url": "file-management/:path(*)",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 70,
+        "y": 280,
+        "wires": [
+            [
+                "4c7468519b7e03b6"
+            ]
+        ]
+    },
+    {
+        "id": "4d4ff31a94dc89f9",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "delete File",
+        "url": "file-management/:path(*)",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 460,
+        "wires": [
+            [
+                "d5500a30b1a4bf0c"
+            ]
+        ]
+    },
+    {
+        "id": "bbb0d00efb18556f",
+        "type": "http response",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 520,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "bd60399b9773a3b3",
+        "type": "http response",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "statusCode": "204",
+        "headers": {},
+        "x": 520,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "74406edc6d3b8550",
+        "type": "http response",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "statusCode": "400",
+        "headers": {},
+        "x": 520,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "79fb8898cd7e7d34",
+        "type": "http response",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 520,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "6c342cf2f54b2b51",
+        "type": "http response",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 520,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "308e1dce8f2602df",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "do it",
+        "func": "  let FilePath = msg.req.params.path.trim()\n    .replace(/^\\/+/,'')     // remove any leading \"/\"\n    .replace(/\\/+$/,'')     // remove trailing \"/\"s\n    .replace(/\\/\\/+/g,'/')  // reduce multiple \"/\"\n\n    let PathList = FilePath.split('/'), Result = []\n    Loop: for (let i = 0, l = PathList.length; i < l; i++) {\n      let PathItem = PathList[i].trim()\n      switch (PathItem) {\n        case '.':  break\n        case '..': if (Result.length === 0) {\n                     msg.payload    = 'Bad Request'\n                     msg.statusCode = 400\n                     return [null,msg]             // never leave allowed folder\n                   } else {\n                     Result.pop()\n                   }\n                   break\n        default:   Result.push(PathItem)\n      }\n    }\n  msg.FilePath = './file-management/' + Result.join('/')\n  return [msg,null]\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 840,
+        "wires": [
+            [
+                "74703c6c1e7cf70f"
+            ],
+            [
+                "e23754fad2845667"
+            ]
+        ]
+    },
+    {
+        "id": "74dba9c9f33b67e5",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "get file or folder",
+        "func": "  let FilePath = path.join(process.cwd(),msg.FilePath)\n  if (path.basename(FilePath) === '.DS_Store') {\n    handleError({ code:'ENOFILE' })               // very special case for macOS\n  }\n\n/**** distinguish between files and folders ****/\n\n  fs.stat(FilePath, (Error,FileInfo) => {\n    if (Error == null) {\n      switch (true) {\n        case FileInfo.isFile():      readFile();   break\n        case FileInfo.isDirectory(): readFolder(); break\n        default:                     handleError({ code:'ENOFILE' }) // DRY\n      }\n    } else {\n      handleError(Error)\n    }\n  })\n\n/**** when reading a file, deliver its content ****/\n\n  function readFile () {\n    fs.readFile(FilePath, (Error,Result) => {\n      if (Error == null) {\n        let FileTypeMappings = flow.get('FileTypeMappings') || {}\n\n        let FileSuffix  = path.extname(FilePath)\n        let ContentType = FileTypeMappings[FileSuffix] || 'application/octet-stream'\n\n        msg.headers = msg.headers || {}\n        msg.headers['Content-Type'] = ContentType\n\n        msg.payload    = Result\n        msg.statusCode = 200\n\n        node.send([msg,null])\n        node.done()\n      } else {\n        handleError(Error)\n      }\n    })\n  }\n\n/**** when reading a folder, deliver a list of its entries ****/\n\n  function readFolder () {\n    fs.readdir(FilePath, (Error,FileList) => {\n      if (Error == null) {\n        let Result = []\n        function inspectNextEntry (Error) {\n          if (FileList.length > 0) {\n            let FileName = FileList.shift()\n            if (FileName === '.DS_Store') {       // very special case for macOS\n              inspectNextEntry()\n            } else {\n              fs.stat(path.join(FilePath,FileName), (Error,FileInfo) => {\n                if (Error == null) {\n                  switch (true) {\n                    case FileInfo.isDirectory(): Result.push(FileName + '/'); break\n                    case FileInfo.isFile():      Result.push(FileName);       break\n                  }\n                  inspectNextEntry()\n                } else {\n                  handleError(Error)\n                }\n              })\n            }\n          } else {\n            msg.headers = msg.headers || {}\n            msg.headers['Content-Type'] = 'application/list+json'\n\n            msg.payload = Result\n            node.send([msg])\n            node.done()\n          }\n        }\n        inspectNextEntry()\n      } else {\n        handleError(Error)\n      }\n    })\n  }\n\n/**** handleError ****/\n\n  function handleError (Error) {\n    function report (StatusCode, StatusText, MsgList) {\n      msg.payload    = StatusText\n      msg.statusCode = StatusCode\n      msg.error      = Error\n\n      node.send(MsgList)\n      node.done()\n    }\n\n    switch (Error.code) {\n      case 'ENOENT':  return report(404,'Not Found',            [null,null,msg,null])\n      case 'ENAMETOOLONG':\n      case 'EISDIR':\n      case 'ENOTDIR':\n      case 'ENOFILE': return report(400,'Bad Request',          [null,msg,null,null])\n      default:        return report(500,'Internal Server Error',[null,null,null,msg])\n    }\n  }\n",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            }
+        ],
+        "x": 280,
+        "y": 220,
+        "wires": [
+            [
+                "bbb0d00efb18556f"
+            ],
+            [
+                "74406edc6d3b8550"
+            ],
+            [
+                "6c342cf2f54b2b51"
+            ],
+            [
+                "79fb8898cd7e7d34"
+            ]
+        ]
+    },
+    {
+        "id": "3706a5eb061e8011",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "put file",
+        "func": "  let FilePath = path.join(process.cwd(),msg.FilePath)\n  if (path.basename(FilePath) === '.DS_Store') {\n    handleError({ code:'ENOFILE' })               // very special case for macOS\n  }\n\n/**** the given MIME type must match the given file name suffix ****/\n\n  let FileTypeMappings = flow.get('FileTypeMappings') || {}\n\n  let FileSuffix = path.extname(FilePath)\n  let FileType   = FileTypeMappings[FileSuffix] || 'application/octet-stream'\n\n  let ContentType = (msg.req.headers['content-type'] || '').toLowerCase()\n  if (! ContentType.startsWith(FileType)) {\n    handleError({ code:'Unsupported Media Type' })                        // DRY\n  }\n\n  let FileValue = msg.payload\n\n/**** auto-create a folder for the file and write the file to disk ****/\n\n  fs.mkdir(path.dirname(FilePath),{ recursive:true }, (Error) => {\n    if (Error == null) {\n      fs.writeFile(FilePath, FileValue, (Error,Result) => {\n        if (Error == null) {\n          msg.payload    = ''\n          msg.statusCode = 204\n\n          node.send([msg,null,null,null])\n          node.done()\n        } else {\n          handleError(Error)\n        }\n      })\n    } else {\n      handleError(Error)\n    }\n  })\n\n/**** handleError ****/\n\n  function handleError (Error) {\n    function report (StatusCode, StatusText, MsgList) {\n      msg.payload    = StatusText\n      msg.statusCode = StatusCode\n      msg.error      = Error\n\n      node.send(MsgList)\n      node.done()\n    }\n\n    switch (Error.code) {\n      case 'ENAMETOOLONG':\n      case 'EISDIR':\n      case 'ENOFILE': return report(400,'Bad Request',           [null,msg,null,null])\n      case 'Unsupported Media Type':\n                      return report(415,'Unsupported Media Type',[null,null,msg,null])\n      default:        return report(500,'Internal Server Error', [null,null,null,msg])\n    }\n  }\n",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            }
+        ],
+        "x": 310,
+        "y": 340,
+        "wires": [
+            [
+                "bd60399b9773a3b3"
+            ],
+            [
+                "74406edc6d3b8550"
+            ],
+            [
+                "9e6c43e4cbcb0611"
+            ],
+            [
+                "79fb8898cd7e7d34"
+            ]
+        ]
+    },
+    {
+        "id": "79b877747eda6fc3",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "delete file or folder",
+        "func": "  let FilePath = path.join(process.cwd(),msg.FilePath)\n  if (path.basename(FilePath) === '.DS_Store') {\n    handleSuccess()                               // very special case for macOS\n  }\n\n/**** delete the given file or folder - if it still exists ****/\n\n  fs.stat(FilePath, (Error,FileInfo) => {\n    if (Error == null) {\n      switch (true) {\n        case FileInfo.isFile():\n          fs.unlink(FilePath, (Error) => {\n            if (Error == null) { handleSuccess() } else { handleError(Error) }\n          })\n          break\n        case FileInfo.isDirectory():\n          fs.rmdir(FilePath, { recursive:true }, (Error) => {\n            if (Error == null) { handleSuccess() } else { handleError(Error) }\n          })\n          break\n        default:\n          handleError({ code:'ENOFILE' }) // DRY\n      }\n    } else {\n      handleError(Error)\n    }\n  })\n\n/**** handleSuccess ****/\n\n  function handleSuccess () {\n    msg.payload    = ''\n    msg.statusCode = 204\n  \n    node.send([msg,null,null])\n    node.done()\n  }\n\n/**** handleError ****/\n\n  function handleError (Error) {\n    function report (StatusCode, StatusText, MsgList) {\n      msg.payload    = StatusText\n      msg.statusCode = StatusCode\n      msg.error      = Error\n  \n      node.send(MsgList)\n      node.done()\n    }\n  \n    switch (Error.code) {\n      case 'ENOENT':  report(204,'',                     [msg,null,null]); break\n      case 'ENAMETOOLONG':\n      case 'ENOFILE': report(400,'Bad Request',          [null,msg,null]); break\n      default:        report(500,'Internal Server Error',[null,null,msg]); break\n    }\n  }\n",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            }
+        ],
+        "x": 270,
+        "y": 520,
+        "wires": [
+            [
+                "bd60399b9773a3b3"
+            ],
+            [
+                "74406edc6d3b8550"
+            ],
+            [
+                "79fb8898cd7e7d34"
+            ]
+        ]
+    },
+    {
+        "id": "7a94243fb2227294",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "post File",
+        "url": "file-management/:path(*)",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 580,
+        "wires": [
+            [
+                "7732f43460a17876"
+            ]
+        ]
+    },
+    {
+        "id": "938f16832ba467b4",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "upload file",
+        "func": "  let FilePath  = path.join(process.cwd(),msg.FilePath)\n  if (path.basename(FilePath) === '.DS_Store') {\n    handleError({ code:'ENOFILE' })               // very special case for macOS\n  }\n\n  if (Array.isArray(msg.req.files) && (msg.req.files.length > 0)) {\n    let FileValue = msg.req.files[0].buffer\n\n    fs.mkdir(path.dirname(FilePath),{ recursive:true }, (Error) => {\n      if (Error == null) {\n        fs.writeFile(FilePath, FileValue, (Error,Result) => {\n          if (Error == null) {\n            msg.payload    = ''\n            msg.statusCode = 204\n  \n            node.send([msg,null,null,null])\n            node.done()\n          } else {\n            handleError(Error)\n          }\n        })\n      } else {\n        handleError(Error)\n      }\n    })\n  } else {\n    handleError({ code:'no file to be uploaded' }) // DRY\n  }\n\n/**** handleError ****/\n\n  function handleError (Error) {\n    function report (StatusCode, StatusText, MsgList) {\n      msg.payload    = StatusText\n      msg.statusCode = StatusCode\n      msg.error      = Error\n\n      node.send(MsgList)\n      node.done()\n    }\n\n    switch (Error.code) {\n      case 'no file to be uploaded':\n      case 'ENAMETOOLONG':\n      case 'EISDIR':\n      case 'ENOFILE': return report(400,'Bad Request',          [null,msg,null,null])\n      case 'ENOENT':  return report(404,'Not Found',            [null,null,msg,null])\n      default:        return report(500,'Internal Server Error',[null,null,null,msg])\n    }\n  }\n",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            }
+        ],
+        "x": 290,
+        "y": 640,
+        "wires": [
+            [
+                "bd60399b9773a3b3"
+            ],
+            [
+                "74406edc6d3b8550"
+            ],
+            [
+                "6c342cf2f54b2b51"
+            ],
+            [
+                "79fb8898cd7e7d34"
+            ]
+        ]
+    },
+    {
+        "id": "94e796282b41a449",
+        "type": "catch",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "scope": null,
+        "uncaught": true,
+        "x": 260,
+        "y": 700,
+        "wires": [
+            [
+                "0f9511dcddb4b4d7",
+                "79fb8898cd7e7d34"
+            ]
+        ]
+    },
+    {
+        "id": "0f9511dcddb4b4d7",
+        "type": "debug",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'internal error'",
+        "statusType": "jsonata",
+        "x": 510,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "3203ec9ab1afd0a6",
+        "type": "inject",
+        "z": "1a41b95966463dc1",
+        "name": "at Startup",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 1000,
+        "wires": [
+            [
+                "862a671ca96a8522"
+            ]
+        ]
+    },
+    {
+        "id": "862a671ca96a8522",
+        "type": "file in",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "filename": "./FileTypeMappings.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 310,
+        "y": 1000,
+        "wires": [
+            [
+                "2137e53eea0dfa07"
+            ]
+        ]
+    },
+    {
+        "id": "2137e53eea0dfa07",
+        "type": "json",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 130,
+        "y": 1060,
+        "wires": [
+            [
+                "9984f3b4e7327efe"
+            ]
+        ]
+    },
+    {
+        "id": "9984f3b4e7327efe",
+        "type": "change",
+        "z": "1a41b95966463dc1",
+        "name": "save in flow context",
+        "rules": [
+            {
+                "t": "set",
+                "p": "FileTypeMappings",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 1060,
+        "wires": [
+            [
+                "cdca7ed0970868ea"
+            ]
+        ]
+    },
+    {
+        "id": "8ab3f259a313d741",
+        "type": "catch",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "scope": [
+            "862a671ca96a8522",
+            "2137e53eea0dfa07"
+        ],
+        "uncaught": false,
+        "x": 130,
+        "y": 1100,
+        "wires": [
+            [
+                "ec4320501e1d68a1"
+            ]
+        ]
+    },
+    {
+        "id": "ec4320501e1d68a1",
+        "type": "debug",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'could not load mappings'",
+        "statusType": "jsonata",
+        "x": 270,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "5c0f653d172ae60c",
+        "type": "comment",
+        "z": "1a41b95966463dc1",
+        "name": "FileTypeMappings.json maps File Suffixes to MIME-Types",
+        "info": "",
+        "x": 230,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "cdca7ed0970868ea",
+        "type": "debug",
+        "z": "1a41b95966463dc1",
+        "name": "Status",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "'mappings loaded'",
+        "statusType": "jsonata",
+        "x": 510,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "f4931c3f9b3f6f6e",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "get root",
+        "url": "file-management",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 70,
+        "y": 100,
+        "wires": [
+            [
+                "160c433cfd6fea1b"
+            ]
+        ]
+    },
+    {
+        "id": "160c433cfd6fea1b",
+        "type": "change",
+        "z": "1a41b95966463dc1",
+        "name": "set path",
+        "rules": [
+            {
+                "t": "set",
+                "p": "FilePath",
+                "pt": "msg",
+                "to": "'./file-management/'",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 220,
+        "y": 100,
+        "wires": [
+            [
+                "74dba9c9f33b67e5"
+            ]
+        ]
+    },
+    {
+        "id": "e815480950bd465c",
+        "type": "comment",
+        "z": "1a41b95966463dc1",
+        "name": "special case for root folder",
+        "info": "",
+        "x": 470,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "9e6c43e4cbcb0611",
+        "type": "http response",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "statusCode": "415",
+        "headers": {},
+        "x": 520,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "39d7d9d55ce45510",
+        "type": "reusable-in",
+        "z": "1a41b95966463dc1",
+        "name": "normalize path",
+        "info": "describe your reusable flow here",
+        "scope": "local",
+        "x": 100,
+        "y": 840,
+        "wires": [
+            [
+                "308e1dce8f2602df"
+            ]
+        ]
+    },
+    {
+        "id": "74703c6c1e7cf70f",
+        "type": "reusable-out",
+        "z": "1a41b95966463dc1",
+        "name": "ok",
+        "position": 1,
+        "x": 410,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "e23754fad2845667",
+        "type": "reusable-out",
+        "z": "1a41b95966463dc1",
+        "name": "invalid",
+        "position": "2",
+        "x": 410,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "8e151591b9ee0ff3",
+        "type": "reusable",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "target": "normalize path",
+        "outputs": 2,
+        "x": 240,
+        "y": 160,
+        "wires": [
+            [
+                "74dba9c9f33b67e5"
+            ],
+            [
+                "74406edc6d3b8550"
+            ]
+        ]
+    },
+    {
+        "id": "4c7468519b7e03b6",
+        "type": "reusable",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "target": "normalize path",
+        "outputs": 2,
+        "x": 240,
+        "y": 280,
+        "wires": [
+            [
+                "3706a5eb061e8011"
+            ],
+            [
+                "74406edc6d3b8550"
+            ]
+        ]
+    },
+    {
+        "id": "d5500a30b1a4bf0c",
+        "type": "reusable",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "target": "normalize path",
+        "outputs": 2,
+        "x": 260,
+        "y": 460,
+        "wires": [
+            [
+                "79b877747eda6fc3"
+            ],
+            [
+                "74406edc6d3b8550"
+            ]
+        ]
+    },
+    {
+        "id": "7732f43460a17876",
+        "type": "reusable",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "target": "normalize path",
+        "outputs": 2,
+        "x": 260,
+        "y": 580,
+        "wires": [
+            [
+                "938f16832ba467b4"
+            ],
+            [
+                "74406edc6d3b8550"
+            ]
+        ]
+    },
+    {
+        "id": "5623732d9be34b9e",
+        "type": "comment",
+        "z": "1a41b95966463dc1",
+        "name": "Path Validation and Normalization",
+        "info": "",
+        "x": 160,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "dbc0338068abe5dd",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "delete root",
+        "url": "file-management",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 400,
+        "wires": [
+            [
+                "9f682dd929e66074"
+            ]
+        ]
+    },
+    {
+        "id": "9f682dd929e66074",
+        "type": "change",
+        "z": "1a41b95966463dc1",
+        "name": "set path",
+        "rules": [
+            {
+                "t": "set",
+                "p": "FilePath",
+                "pt": "msg",
+                "to": "'./file-management/'",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 240,
+        "y": 400,
+        "wires": [
+            [
+                "79b877747eda6fc3"
+            ]
+        ]
+    }
+]
