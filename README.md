@@ -55,7 +55,7 @@ In order to use this store, simply import its [flow](examples/memory-based-key-v
 As shown in the flow, all fundamental operations of a Key-Value Store are implemented as HTTP endpoints
 
 * **list the keys of all stored entries**<br>`GET memory-based-key-value-store/`<br>responds with a JSON document containing a (possibly empty) array with the keys of all entries found in the store
-* **retrieve the value of a specific entry**<br>`memory-based-key-value-store/<key>``<br>responds with a text document containg the (possibly empty) value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found")
+* **retrieve the value of a specific entry**<br>`GET memory-based-key-value-store/<key>`<br>responds with a text document containg the (possibly empty) value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found")
 * **set the value of a specific entry**<br>
 * **delete a specific entry**<br>
 * **delete all entries**<br>
