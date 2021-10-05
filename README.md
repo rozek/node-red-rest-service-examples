@@ -134,7 +134,7 @@ In order to use this store, simply import its [flow](examples/file-management.js
 
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance.
 
-#### How to use the Store ####
+#### How to manage Files ####
 
 As shown in the flow, all provided operations are implemented as HTTP endpoints
 
