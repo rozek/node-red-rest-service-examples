@@ -102,6 +102,7 @@ File inspection (including timestamps and size information) is not yet implement
 
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance
 
+For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store. Before, you should also copy the example files which come with this repository (found in directory [file-management](https://github.com/rozek/node-red-rest-service-examples/tree/main/file-management)) into that folder. Additionally, in order to test the file upload, you will have to point the related Postman request to the file that is to be uploaded - simply select file `image-file.png` from the example files.
 
 ## License ##
 
