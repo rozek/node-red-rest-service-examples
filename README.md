@@ -50,6 +50,16 @@ Currently, this service is accessible for everybody. But if you combine it with 
 
 In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy. Keys are expected to be less than 256 characters long, values must contain plain text with less than 1024<sup>2</sup> characters.
 
+#### How to use the Store ####
+
+As shown in the flow, all fundamental operations of a Key-Value Store are implemented as HTTP endpoints
+
+* **list the keys of all stored entries**<br>`GET memory-based-key-value-store/`<br>responds with a JSON document containing a (possibly empty) array with the keys of all entries found in the store
+* **retrieve the value of a specific entry**<br>`memory-based-key-value-store/<key>``<br>responds with a text document containg the (possibly empty) value of a store entry identified by the "key" given in the request URL - provided that such an entry exists, otherwise the server just responds with status code 404 ("Not Found")
+* **set the value of a specific entry**<br>
+* **delete a specific entry**<br>
+* **delete all entries**<br>
+
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store.
 
 ### File-based Key-Value-Store ###
