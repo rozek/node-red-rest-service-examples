@@ -410,7 +410,7 @@
 			"name": "File Management",
 			"item": [
 				{
-					"name": "get root folder",
+					"name": "inspect root folder",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -421,6 +421,47 @@
 							],
 							"path": [
 								"file-management"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inspect root folder 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management/img/../",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"img",
+								"..",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inspect forbidden folder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management/img/../../",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"img",
+								"..",
+								"..",
+								""
 							]
 						}
 					},
@@ -518,7 +559,26 @@
 					"response": []
 				},
 				{
-					"name": "get subfolder",
+					"name": "read forbidden file",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management/../FileTypeMappings.json",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"..",
+								"FileTypeMappings.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inspect subfolder",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -530,6 +590,175 @@
 							"path": [
 								"file-management",
 								"img"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "write new text-file into root folder",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "this text file was written by Postman"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management/new-text-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"new-text-file.txt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "write new text-file into new folder",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "this text file was written into a new folder by Postman"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management/new-folder/new-text-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"new-folder",
+								"new-text-file.txt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "write forbidden file",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "this text should never be written into a file"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management/../FileTypeMappings.json",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"..",
+								"FileTypeMappings.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload new text-file into new folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/andreas/Rozek/GitHub/node-red-rest-service-examples/file-management/img/image-file.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management/new-folder/new-image-file.png",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"new-folder",
+								"new-image-file.png"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete new text-file from root folder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management/new-text-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"new-text-file.txt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete new folder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management/new-folder",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"new-folder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete forbidden file",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management/../FileTypeMappings.json",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management",
+								"..",
+								"FileTypeMappings.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete root folder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/file-management",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
 							]
 						}
 					},
