@@ -46,7 +46,7 @@ In the simplest case, the whole key-value-store may just be kept in memory - kno
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy.
+In order to use this store, simply import its [flow](examples/memory-based-key-value-store.json) into your Node-RED workspace and deploy. Out-of-the-box, its HTTP endpoints are accessible for everybody - if you need to protect them, you may add one of the mechanisms shown in the author's [Authentication and Authorization Examples](https://github.com/rozek/node-red-authorization-examples).
 
 #### How to use the Store ####
 
@@ -70,7 +70,7 @@ The shown example reads from and writes to a file called `file-based-key-value-s
 
 Currently, this service is accessible for everybody. But if you combine it with the authentication and authorization mechanisms from the [Node-RED Authorization Examples](https://github.com/rozek/node-red-authorization-examples), you may also easily create a *closed* Key-Value-Store.
 
-In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy.
+In order to use this store, simply import its [flow](examples/file-based-key-value-store.json) into your Node-RED workspace and deploy. Out-of-the-box, its HTTP endpoints are accessible for everybody - if you need to protect them, you may add one of the mechanisms shown in the author's [Authentication and Authorization Examples](https://github.com/rozek/node-red-authorization-examples).
 
 #### How to use the Store ####
 
@@ -99,7 +99,7 @@ If you need to generate new UUIDs you may either use an [online UUID generator](
 
 ![](examples/folder-based-key-value-store-III.png)
 
-In order to use this store, simply import its [flow](examples/folder-based-key-value-store.json) into your Node-RED workspace and deploy.
+In order to use this store, simply import its [flow](examples/folder-based-key-value-store.json) into your Node-RED workspace and deploy. Out-of-the-box, its HTTP endpoints are accessible for everybody - if you need to protect them, you may add one of the mechanisms shown in the author's [Authentication and Authorization Examples](https://github.com/rozek/node-red-authorization-examples).
 
 #### How to use the Store ####
 
@@ -128,7 +128,7 @@ File inspection (including timestamps and size information) is not yet implement
 ![](examples/file-management-I.png)
 ![](examples/file-management-II.png)
 
-In order to use this store, simply import its [flow](examples/file-management.json) into your Node-RED workspace and deploy.
+In order to use this kind of file management, simply import its [flow](examples/file-management.json) into your Node-RED workspace and deploy. Out-of-the-box, its HTTP endpoints are accessible for everybody - if you need to protect them, you may add one of the mechanisms shown in the author's [Authentication and Authorization Examples](https://github.com/rozek/node-red-authorization-examples).
 
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance.
 
