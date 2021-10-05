@@ -138,14 +138,12 @@ In order to use this store, simply import its [flow](examples/file-management.js
 
 As shown in the flow, all provided operations are implemented as HTTP endpoints
 
-* **inspect a folder**<br>`GET file-management/<folder-path>`<br>
-* **read a file**<br>`GET file-management/<file-path>`<br>
-* **write a file**<br>`PUT file-management/<file-path>`<br>
-* **upload a file**<br>`POST file-management/<file-path>`<br>
-* **delete a folder**<br>`DELETE  file-management/<folder-path>`<br>
-* **delete a file**<br>`DELETE  file-management/<file-path>`<br>
-
-
+* **inspect a folder**<br>`GET file-management/<path>`<br>if the "path" given in the request URL points to a directory, the server returns a JSON document containing a (possibly empty) array with the names of all files and folders found in that directory. Folder names will be suffixed with a slash `/` in order to mark them as such, file names are not. If neither a file nor a directory exist at the given path, the server responds with status code 404 ("Not Found"), if the path points to a file, the contents of that file are returned (see below)
+* **read a file**<br>`GET file-management/<path>`<br>if the "path" given in the request URL points to a file, the server returns a document with the contents of that file. The MIME type of that document will depend on the file suffix: file names ending with `.txt` will result in documents of type `text/plain`, names ending with `.png` in those of type `image/png` etc. If neither a file nor a directory exist at the given path, the server responds with status code 404 ("Not Found"), if the path points to a directory, a list with the names of all files and folders in that directory is returned (see above)
+* **write a file**<br>`PUT file-management/<path>`<br>
+* **upload a file**<br>`POST file-management/<path>`<br>
+* **delete a folder**<br>`DELETE  file-management/<path>`<br>
+* **delete a file**<br>`DELETE  file-management/<path>`<br>
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store. Before, you should also copy the example files which come with this repository (found in directory [file-management](https://github.com/rozek/node-red-rest-service-examples/tree/main/file-management)) into that folder. Additionally, in order to test the file upload, you will have to point the related Postman request to the file that is to be uploaded - simply select file `image-file.png` from the example files.
 
