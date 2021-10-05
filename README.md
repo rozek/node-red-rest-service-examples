@@ -130,7 +130,22 @@ File inspection (including timestamps and size information) is not yet implement
 ![](examples/file-management-I.png)
 ![](examples/file-management-II.png)
 
-> For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance
+In order to use this store, simply import its [flow](examples/file-management.json) into your Node-RED workspace and deploy.
+
+> For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance.
+
+#### How to use the Store ####
+
+As shown in the flow, all provided operations are implemented as HTTP endpoints
+
+* **inspect a folder**<br>`GET file-management/<folder-path>`<br>
+* **read a file**<br>`GET file-management/<file-path>`<br>
+* **write a file**<br>`PUT file-management/<file-path>`<br>
+* **upload a file**<br>`POST file-management/<file-path>`<br>
+* **delete a folder**<br>`DELETE  file-management/<folder-path>`<br>
+* **delete a file**<br>`DELETE  file-management/<file-path>`<br>
+
+
 
 For experimentation purposes, you may import the [Postman collection](PostmanCollection.json) that comes with this repository and use the predefined requests for this store. Before, you should also copy the example files which come with this repository (found in directory [file-management](https://github.com/rozek/node-red-rest-service-examples/tree/main/file-management)) into that folder. Additionally, in order to test the file upload, you will have to point the related Postman request to the file that is to be uploaded - simply select file `image-file.png` from the example files.
 
