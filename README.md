@@ -130,6 +130,8 @@ File inspection (including timestamps and size information) is not yet implement
 
 In order to use this kind of file management, simply import its [flow](examples/file-management.json) into your Node-RED workspace and deploy. Out-of-the-box, its HTTP endpoints are accessible for everybody - if you need to protect them, you may add one of the mechanisms shown in the author's [Authentication and Authorization Examples](https://github.com/rozek/node-red-authorization-examples).
 
+The implementation recognizes many different file types by looking at their type suffixes and sets the "Content-Type" header accordingly (see file [FileTypeMappings.json](https://raw.githubusercontent.com/rozek/node-red-rest-service-examples/main/FileTypeMappings.json) for the complete set) 
+
 > For this example to work, a folder named `file-management` has to be created in the working directory of your Node-RED instance.
 
 #### How to manage Files ####
