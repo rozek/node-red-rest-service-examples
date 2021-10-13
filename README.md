@@ -12,7 +12,7 @@ For this series, it is assumed that the reader already installed Node-RED (as de
 
 For these examples to be run, it is necessary to install the following extension:
 
-* [node-red-contrib-reusable-flows](https://github.com/ollixx/node-red-contrib-reusable-flows)<br>"Reusable Flows" allow multiply needed flows to be defined once and then invoked from multiple places
+* [node-red-contrib-reusable-flows](https://github.com/rozek/node-red-contrib-reusable-flows)<br>"Reusable Flows" allow multiply needed flows to be defined once and then invoked from multiple places
 
 ### Postman ###
 
