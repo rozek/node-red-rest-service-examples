@@ -127,7 +127,7 @@
         "finalize": "",
         "libs": [],
         "x": 270,
-        "y": 840,
+        "y": 940,
         "wires": [
             [
                 "74703c6c1e7cf70f"
@@ -322,8 +322,8 @@
         "name": "",
         "scope": null,
         "uncaught": true,
-        "x": 260,
-        "y": 700,
+        "x": 280,
+        "y": 820,
         "wires": [
             [
                 "0f9511dcddb4b4d7",
@@ -345,7 +345,7 @@
         "statusVal": "'internal error'",
         "statusType": "jsonata",
         "x": 510,
-        "y": 700,
+        "y": 820,
         "wires": []
     },
     {
@@ -369,7 +369,7 @@
         "topic": "",
         "payloadType": "date",
         "x": 110,
-        "y": 1000,
+        "y": 1160,
         "wires": [
             [
                 "862a671ca96a8522"
@@ -388,7 +388,7 @@
         "encoding": "utf8",
         "allProps": false,
         "x": 310,
-        "y": 1000,
+        "y": 1160,
         "wires": [
             [
                 "2137e53eea0dfa07"
@@ -404,7 +404,7 @@
         "action": "",
         "pretty": false,
         "x": 130,
-        "y": 1060,
+        "y": 1220,
         "wires": [
             [
                 "9984f3b4e7327efe"
@@ -431,7 +431,7 @@
         "to": "",
         "reg": false,
         "x": 320,
-        "y": 1060,
+        "y": 1220,
         "wires": [
             [
                 "cdca7ed0970868ea"
@@ -449,7 +449,7 @@
         ],
         "uncaught": false,
         "x": 130,
-        "y": 1100,
+        "y": 1260,
         "wires": [
             [
                 "ec4320501e1d68a1"
@@ -470,7 +470,7 @@
         "statusVal": "'could not load mappings'",
         "statusType": "jsonata",
         "x": 270,
-        "y": 1100,
+        "y": 1260,
         "wires": []
     },
     {
@@ -480,7 +480,7 @@
         "name": "FileTypeMappings.json maps File Suffixes to MIME-Types",
         "info": "",
         "x": 230,
-        "y": 940,
+        "y": 1100,
         "wires": []
     },
     {
@@ -497,7 +497,7 @@
         "statusVal": "'mappings loaded'",
         "statusType": "jsonata",
         "x": 510,
-        "y": 1060,
+        "y": 1220,
         "wires": []
     },
     {
@@ -573,7 +573,7 @@
         "info": "describe your reusable flow here",
         "scope": "local",
         "x": 100,
-        "y": 840,
+        "y": 940,
         "wires": [
             [
                 "308e1dce8f2602df"
@@ -587,7 +587,7 @@
         "name": "ok",
         "position": 1,
         "x": 410,
-        "y": 820,
+        "y": 920,
         "wires": []
     },
     {
@@ -597,7 +597,7 @@
         "name": "invalid",
         "position": "2",
         "x": 410,
-        "y": 860,
+        "y": 960,
         "wires": []
     },
     {
@@ -679,7 +679,7 @@
         "name": "Path Validation and Normalization",
         "info": "",
         "x": 160,
-        "y": 780,
+        "y": 880,
         "wires": []
     },
     {
@@ -723,6 +723,143 @@
         "wires": [
             [
                 "79b877747eda6fc3"
+            ]
+        ]
+    },
+    {
+        "id": "e98ebfda7cf85261",
+        "type": "http in",
+        "z": "1a41b95966463dc1",
+        "name": "move File",
+        "url": "file-management",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 80,
+        "y": 700,
+        "wires": [
+            [
+                "3fb0e42236826b69"
+            ]
+        ]
+    },
+    {
+        "id": "0b12d2e115941ada",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "do it",
+        "func": "  function normalizedPath (FilePath) {\n    FilePath = FilePath.trim()\n      .replace(/^\\/+/,'')     // remove any leading \"/\"\n      .replace(/\\/+$/,'')     // remove trailing \"/\"s\n      .replace(/\\/\\/+/g,'/')  // reduce multiple \"/\"\n    if (FilePath === '') {\n      msg.payload    = 'Bad Request'\n      msg.statusCode = 400\n      return [null,msg]                                      // missing argument\n    }\n\n    let PathList = FilePath.split('/'), Result = []\n    Loop: for (let i = 0, l = PathList.length; i < l; i++) {\n      let PathItem = PathList[i].trim()\n      switch (PathItem) {\n        case '.':  break\n        case '..': if (Result.length === 0) {\n                     msg.payload    = 'Bad Request'\n                     msg.statusCode = 400\n                     return [null,msg]             // never leave allowed folder\n                   } else {\n                     Result.pop()\n                   }\n                   break\n        default:   Result.push(PathItem)\n      }\n    }\n\n    return './file-management/' + Result.join('/')\n  }\n\n\n  let SourcePath = normalizedPath(msg.req.query.from)\n  if (typeof SourcePath !== 'string') { return SourcePath }\n\n  let DestinationPath = normalizedPath(msg.req.query.to)\n  if (typeof DestinationPath !== 'string') { return DestinationPath }\n\n  msg.SourcePath      = SourcePath\n  msg.DestinationPath = DestinationPath\n\n  return [msg,null]\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 1020,
+        "wires": [
+            [
+                "f621dc7e86d0ab26"
+            ],
+            [
+                "a2b99135ecde9161"
+            ]
+        ]
+    },
+    {
+        "id": "e420233758722e3f",
+        "type": "reusable-in",
+        "z": "1a41b95966463dc1",
+        "name": "normalize paths",
+        "info": "describe your reusable flow here",
+        "scope": "local",
+        "x": 100,
+        "y": 1020,
+        "wires": [
+            [
+                "0b12d2e115941ada"
+            ]
+        ]
+    },
+    {
+        "id": "f621dc7e86d0ab26",
+        "type": "reusable-out",
+        "z": "1a41b95966463dc1",
+        "name": "ok",
+        "position": 1,
+        "x": 410,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "a2b99135ecde9161",
+        "type": "reusable-out",
+        "z": "1a41b95966463dc1",
+        "name": "invalid",
+        "position": "2",
+        "x": 410,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "3fb0e42236826b69",
+        "type": "reusable",
+        "z": "1a41b95966463dc1",
+        "name": "",
+        "target": "normalize paths",
+        "outputs": 2,
+        "x": 260,
+        "y": 700,
+        "wires": [
+            [
+                "a94f04b9b53e3568"
+            ],
+            [
+                "74406edc6d3b8550"
+            ]
+        ],
+        "outputLabels": [
+            "ok",
+            "invalid"
+        ]
+    },
+    {
+        "id": "a94f04b9b53e3568",
+        "type": "function",
+        "z": "1a41b95966463dc1",
+        "name": "move file or folder",
+        "func": "  let SourcePath = path.join(process.cwd(),msg.SourcePath)\n  if (path.basename(SourcePath) === '.DS_Store') {\n    return handleError({ code:'ENOENT' })         // very special case for macOS\n  }\n\n  let DestinationPath = path.join(process.cwd(),msg.DestinationPath)\n  if (path.basename(DestinationPath) === '.DS_Store') {\n    return handleError({ code:'Bad Destination' })// very special case for macOS\n  }\n\n  if (SourcePath === DestinationPath) {\n    handleSuccess()\n    return\n  }\n\n  fs.access(SourcePath, fs.constants.F_OK, (Error) => {\n    if (Error == null) {                                    // source exists\n      fs.access(DestinationPath, fs.constants.F_OK, (Error) => {\n        if (Error == null) {                           // destination exists\n          fs.stat(DestinationPath, (Error,FileInfo) => {\n            if (Error == null) {\n              switch (true) {\n                case FileInfo.isFile():      handleError({ code:'EISFILE' }); break\n                case FileInfo.isDirectory(): moveFileOrFolder();              break\n                default:                     handleError({ code:'ENODIR' }) // DRY\n              }\n            } else {\n              handleError(Error)\n            }\n          })\n        } else {                                   // destination is missing\n          makeFolder(() => { moveFileOrFolder() })\n        }\n      })\n    } else {\n      handleError({ code:'ENOENT' })\n    }\n  })\n\n/**** makeFolder ****/\n\n  function makeFolder (Callback) {\n    fs.mkdir(path.dirname(DestinationPath),{ recursive:true }, (Error) => {\n      if (Error == null) {\n        Callback()\n      } else {\n        handleError(Error)\n      }\n    })\n  }\n\n/**** moveFileOrFolder ****/\n\n  function moveFileOrFolder () {\n    fs.rename(SourcePath,DestinationPath, (Error) => {\n      if (Error == null) {\n        handleSuccess()\n      } else {\n        handleError({ code:'Move Failed' }) // DRY\n      }\n    })\n  }\n\n/**** handleSuccess ****/\n\n  function handleSuccess () {\n    msg.payload    = ''\n    msg.statusCode = 204\n\n    node.send([msg,null,null,null])\n    node.done()\n  }\n\n/**** handleError ****/\n\n  function handleError (Error) {\n    function report (StatusCode, StatusText, MsgList) {\n      msg.payload    = StatusText\n      msg.statusCode = StatusCode\n      msg.error      = Error\n\n      node.send(MsgList)\n      node.done()\n    }\n\n    switch (Error.code) {\n      case 'EISFILE':\n      case 'ENODIR':\n      case 'Bad Destination':\n        return report(400,'Bad Request',           [null,msg,null,null])\n      case 'ENOENT':\n        return report(404,'Not Found',             [null,null,msg,null])\n      default:\n        return report(500,'Internal Server Error', [null,null,null,msg])\n    }\n  }\n",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            },
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "process",
+                "module": "process"
+            }
+        ],
+        "x": 270,
+        "y": 760,
+        "wires": [
+            [
+                "bd60399b9773a3b3"
+            ],
+            [
+                "74406edc6d3b8550"
+            ],
+            [
+                "6c342cf2f54b2b51"
+            ],
+            [
+                "79fb8898cd7e7d34"
             ]
         ]
     }
