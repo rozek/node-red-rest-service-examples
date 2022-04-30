@@ -693,6 +693,161 @@
 					"response": []
 				},
 				{
+					"name": "move missing file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?from=new-folder/missing-file.txt&to=new-folder/no-longer-missing-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "new-folder/missing-file.txt"
+								},
+								{
+									"key": "to",
+									"value": "new-folder/no-longer-missing-file.txt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "move file to existing file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?from=new-folder/new-image-file.png&to=new-folder/new-text-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "new-folder/new-image-file.png"
+								},
+								{
+									"key": "to",
+									"value": "new-folder/new-text-file.txt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rename file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?from=new-folder/new-text-file.txt&to=new-folder/renamed-text-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "new-folder/new-text-file.txt"
+								},
+								{
+									"key": "to",
+									"value": "new-folder/renamed-text-file.txt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "move file to existing folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?from=text-file.txt&to=new-folder/moved-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "text-file.txt"
+								},
+								{
+									"key": "to",
+									"value": "new-folder/moved-file.txt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "move file to non-existing folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?from=new-folder/moved-file.txt&to=new-folder/new-inner-folder/moved-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "new-folder/moved-file.txt"
+								},
+								{
+									"key": "to",
+									"value": "new-folder/new-inner-folder/moved-file.txt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "delete new text-file from root folder",
 					"request": {
 						"method": "DELETE",
