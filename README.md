@@ -120,10 +120,11 @@ Sometimes it is desirable to manage the files on a server from remote, e.g. usin
 In such situations, the following example may be helpful which offers the following features:
 
 * directory inspection (file name listing),
-* file upload and download with automatic directory creation and
-* file and directory removal
+* file upload and download with automatic directory creation,
+* file and directory removal and
+* file and directory name change or movement between folders
 
-File inspection (including timestamps and size information) is not yet implemented (but could be added if needed)
+File inspection (including size information) is not yet implemented (but could be added if needed)
 
 ![](examples/file-management-I.png)
 ![](examples/file-management-II.png)
