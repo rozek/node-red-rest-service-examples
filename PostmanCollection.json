@@ -702,7 +702,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{BaseURL}}/file-management?from=new-folder/missing-file.txt&to=new-folder/no-longer-missing-file.txt",
+							"raw": "{{BaseURL}}/file-management?request=move&from=new-folder/missing-file.txt&to=new-folder/no-longer-missing-file.txt",
 							"host": [
 								"{{BaseURL}}"
 							],
@@ -710,6 +710,10 @@
 								"file-management"
 							],
 							"query": [
+								{
+									"key": "request",
+									"value": "move"
+								},
 								{
 									"key": "from",
 									"value": "new-folder/missing-file.txt"
@@ -733,7 +737,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{BaseURL}}/file-management?from=new-folder/new-image-file.png&to=new-folder/new-text-file.txt",
+							"raw": "{{BaseURL}}/file-management?request=move&from=new-folder/new-image-file.png&to=new-folder/new-text-file.txt",
 							"host": [
 								"{{BaseURL}}"
 							],
@@ -741,6 +745,10 @@
 								"file-management"
 							],
 							"query": [
+								{
+									"key": "request",
+									"value": "move"
+								},
 								{
 									"key": "from",
 									"value": "new-folder/new-image-file.png"
@@ -764,7 +772,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{BaseURL}}/file-management?from=new-folder/new-text-file.txt&to=new-folder/renamed-text-file.txt",
+							"raw": "{{BaseURL}}/file-management?request=move&from=new-folder/new-text-file.txt&to=new-folder/renamed-text-file.txt",
 							"host": [
 								"{{BaseURL}}"
 							],
@@ -772,6 +780,10 @@
 								"file-management"
 							],
 							"query": [
+								{
+									"key": "request",
+									"value": "move"
+								},
 								{
 									"key": "from",
 									"value": "new-folder/new-text-file.txt"
@@ -795,7 +807,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{BaseURL}}/file-management?from=text-file.txt&to=new-folder/moved-file.txt",
+							"raw": "{{BaseURL}}/file-management?request=move&from=text-file.txt&to=new-folder/moved-file.txt",
 							"host": [
 								"{{BaseURL}}"
 							],
@@ -803,6 +815,10 @@
 								"file-management"
 							],
 							"query": [
+								{
+									"key": "request",
+									"value": "move"
+								},
 								{
 									"key": "from",
 									"value": "text-file.txt"
@@ -826,7 +842,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{BaseURL}}/file-management?from=new-folder/moved-file.txt&to=new-folder/new-inner-folder/moved-file.txt",
+							"raw": "{{BaseURL}}/file-management?request=move&from=new-folder/moved-file.txt&to=new-folder/new-inner-folder/moved-file.txt",
 							"host": [
 								"{{BaseURL}}"
 							],
@@ -835,12 +851,78 @@
 							],
 							"query": [
 								{
+									"key": "request",
+									"value": "move"
+								},
+								{
 									"key": "from",
 									"value": "new-folder/moved-file.txt"
 								},
 								{
 									"key": "to",
 									"value": "new-folder/new-inner-folder/moved-file.txt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get timestamp of existing folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?request=mtime&file=new-folder",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "request",
+									"value": "mtime"
+								},
+								{
+									"key": "file",
+									"value": "new-folder"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get timestamp of missing file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/file-management?request=mtime&file=new-folder/missing-file.txt",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"file-management"
+							],
+							"query": [
+								{
+									"key": "request",
+									"value": "mtime"
+								},
+								{
+									"key": "file",
+									"value": "new-folder/missing-file.txt"
 								}
 							]
 						}
